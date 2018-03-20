@@ -13,7 +13,7 @@ public class ListingItem implements Comparable<ListingItem>{
     private int rating;
     private String category;
     private String storeImage;
-    private HashSet<String> additionalImages = new HashSet<String>();
+    private HashSet<String> additionalImages = new HashSet<>();
 
 
     public ListingItem(int id, String name, float price, String desc, int stock, SimpleDate listDate, int rating, String category, String storeImage,HashSet<String> additionalImages ) {

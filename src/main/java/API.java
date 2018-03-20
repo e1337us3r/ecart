@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class API {
 
@@ -25,7 +25,7 @@ public class API {
                     .asJson();
             JSONObject respjson = jsonResponse.getBody().getObject();
             // System.out.println(jsonResponse.getHeaders().get("Set-Cookie").get(0).substring(10,36));
-            if (!checkError(respjson)) {
+            if (hasError(respjson)) {
                 for (Object key : respjson.keySet()) {
                     System.out.println(key + " : " + respjson.get((String) key));
 
@@ -40,7 +40,7 @@ public class API {
         return false;
     }
 
-    private static boolean checkError(JSONObject response) {
+    private static boolean hasError(JSONObject response) {
 
         return response.keySet().contains("error");
 
@@ -66,8 +66,8 @@ public class API {
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .asJson();
             JSONObject respjson = jsonResponse.getBody().getObject(); //Get json body
-            if (!checkError(respjson)) {
-                itemsList = new ArrayList<ListingItem>();
+            if (hasError(respjson)) {
+                itemsList = new ArrayList<>();
                 JSONArray items = (JSONArray) respjson.get("items"); //json 'items' is array of arrays
                 for (int i = 0; i < items.length(); i++) {
                     String unparsedItem = items.get(i).toString(); //get an array of Listing item (which at this point is a String)
@@ -78,7 +78,7 @@ public class API {
 
             } else {
 
-                System.out.println("There has been an error: " + getErrors(respjson));
+                System.out.println("There has been an error: " + Arrays.toString(getErrors(respjson)));
             }
 
 
