@@ -2,21 +2,21 @@ import org.json.JSONArray;
 
 import java.util.HashSet;
 
-public class ListingItem implements Comparable<ListingItem>{
+public class Listing implements Comparable<Listing> {
 
     private int id;
     private String name;
     private double price;
     private String desc;
     private int stock;
-    private SimpleDate listDate;
+    private String listDate;
     private int rating;
     private String category;
     private String storeImage;
     private HashSet<String> additionalImages = new HashSet<>();
 
 
-    public ListingItem(int id, String name, float price, String desc, int stock, SimpleDate listDate, int rating, String category, String storeImage,HashSet<String> additionalImages ) {
+    public Listing(int id, String name, float price, String desc, int stock, String listDate, int rating, String category, String storeImage, HashSet<String> additionalImages) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -28,19 +28,7 @@ public class ListingItem implements Comparable<ListingItem>{
         this.storeImage = storeImage;
     }
 
-    public ListingItem(int id, String name, double price, String desc, int stock, String listDate, int rating, String category, String storeImage) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.desc = desc;
-        this.stock = stock;
-        this.listDate = new SimpleDate(listDate);
-        this.rating = rating;
-        this.category = category;
-        this.storeImage = storeImage;
-    }
-
-    public ListingItem(int id, String name, double price, String desc, int stock, SimpleDate listDate, int rating, String category, String storeImage) {
+    public Listing(int id, String name, double price, String desc, int stock, String listDate, int rating, String category, String storeImage) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -52,13 +40,13 @@ public class ListingItem implements Comparable<ListingItem>{
         this.storeImage = storeImage;
     }
 
-    public ListingItem(JSONArray jsonArray) {
+    public Listing(JSONArray jsonArray) {
         this.id = jsonArray.getInt(ItemCode.ID);
         this.name = jsonArray.getString(ItemCode.NAME);
         this.price = jsonArray.getDouble(ItemCode.PRICE);
         this.desc = jsonArray.getString(ItemCode.DESCRIPTION);
         this.stock = jsonArray.getInt(ItemCode.STOCK);
-        this.listDate = new SimpleDate(jsonArray.getString(ItemCode.LISTDATE));
+        this.listDate = jsonArray.getString(ItemCode.LISTDATE);
         this.rating = jsonArray.getInt(ItemCode.RATING);
         this.category = jsonArray.getString(ItemCode.CATEGORY);
         this.storeImage = jsonArray.getString(ItemCode.IMAGE);
@@ -108,7 +96,11 @@ public class ListingItem implements Comparable<ListingItem>{
         return id;
     }
 
-    public SimpleDate getListDate() {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getListDate() {
         return listDate;
     }
 
@@ -117,7 +109,7 @@ public class ListingItem implements Comparable<ListingItem>{
     }
 
 
-    public int compareTo(ListingItem o) {
+    public int compareTo(Listing o) {
         return this.id-o.getId();
     }
 

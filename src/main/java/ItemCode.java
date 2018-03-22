@@ -1,4 +1,4 @@
-public class ItemCode {
+public abstract class ItemCode {
 
     public static final int ID=0;
     public static final int NAME=1;
