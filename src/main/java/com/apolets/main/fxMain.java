@@ -1,3 +1,5 @@
+package com.apolets.main;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -5,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
 public class fxMain extends Application {
 
     static Stage window;
@@ -25,9 +26,9 @@ public class fxMain extends Application {
         window = primaryStage;
 
         try {
-            root = FXMLLoader.load(Main.class.getResource("fxml/login.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
             window.setTitle("E-cart.com Merchant Client v.01");
-            window.setScene(new Scene(root, 970, 500));
+            window.setScene(new Scene(root, 1000, 580));
             window.setResizable(false);
             window.show();
         } catch (IOException e) {

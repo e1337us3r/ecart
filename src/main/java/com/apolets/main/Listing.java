@@ -1,3 +1,5 @@
+package com.apolets.main;
+
 import org.json.JSONArray;
 
 import java.util.HashSet;
@@ -124,9 +126,11 @@ public class Listing implements Comparable<Listing> {
     public HashSet<String> getAdditionalImages() {
         return additionalImages;
     }
+
     public void addImage(String url){
         additionalImages.add(url);
     }
+
     public void removeImage(String url){
         additionalImages.remove(url);
     }

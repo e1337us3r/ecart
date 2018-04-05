@@ -1,3 +1,5 @@
+package com.apolets.main;
+
 public class Merchant {
     private int id;
     private String companyName;
@@ -45,10 +47,6 @@ public class Merchant {
     public void setBalance(int balance) {
         this.balance = balance;
     }
-
-
-
-
 
 
 }

@@ -1,4 +1,4 @@
-package InputValidator;
+package com.apolets.InputValidator;
 
 import com.jfoenix.validation.RequiredFieldValidator;
 

@@ -1,32 +1,34 @@
-package InputValidator;
+package com.apolets.InputValidator;
 
-import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.base.ValidatorBase;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PasswordValidator extends ValidatorBase {
+public class EmailValidator extends ValidatorBase {
 
-    private static final String PASSWORD_PATTERN =
-            "^[-_\\.\\da-zA-Z]{6,20}$";
+    private static final String EMAIL_PATTERN =
+            "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     private Pattern pattern;
 
-    public PasswordValidator() {
-        pattern = Pattern.compile(PASSWORD_PATTERN);
-        setMessage("Incorrect password format");
+    public EmailValidator() {
+        pattern = Pattern.compile(EMAIL_PATTERN);
     }
 
     @Override
     protected void eval() {
 
-        JFXPasswordField field = (JFXPasswordField) srcControl.get();
+        JFXTextField field = (JFXTextField) srcControl.get();
         if (!validate(field.getText())) {
             hasErrors.set(true);
+            setMessage("Incorrect email format");
             field.getStyleClass().remove(field.getStyleClass().size() - 1);
             field.getStyleClass().add("fieldfail");
+            //System.out.println(field.getStyleClass());
         } else {
             hasErrors.set(false);
+
             field.getStyleClass().remove(field.getStyleClass().size() - 1);
             field.getStyleClass().add("fieldpass");
         }

@@ -1,6 +1,9 @@
-import InputValidator.EmailValidator;
-import InputValidator.PasswordValidator;
-import InputValidator.RequiredValidator;
+package com.apolets.Controllers;
+
+import com.apolets.InputValidator.EmailValidator;
+import com.apolets.InputValidator.PasswordValidator;
+import com.apolets.InputValidator.RequiredValidator;
+import com.apolets.main.fxMain;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -32,9 +35,7 @@ public class LoginController implements Initializable {
 
 
     public void login(ActionEvent e) {
-        boolean ee = jf_email.validate();
-        boolean p = jf_password.validate();
-        if (p && ee) {
+        if (jf_password.validate() && jf_email.validate()) {
             System.out.println(jf_email.getText() + " logged in with password: " + jf_password.getText());
             fxMain.exitLogin();
         } else {

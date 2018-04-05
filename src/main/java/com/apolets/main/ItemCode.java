@@ -1,3 +1,5 @@
+package com.apolets.main;
+
 public abstract class ItemCode {
 
     public static final int ID=0;
@@ -9,9 +11,6 @@ public abstract class ItemCode {
     public static final int RATING=6;
     public static final int CATEGORY=8;
     public static final int IMAGE=9;
-
-
-
 
 
 }

@@ -1,3 +1,5 @@
+package com.apolets.main;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -38,8 +40,8 @@ public abstract class API {
         if (lastResponse.keySet().contains("items")) {
             JSONArray items = (JSONArray) lastResponse.get("items"); //json 'items' is array of arrays
             for (int i = 0; i < items.length(); i++) {
-                String unparsedItem = items.get(i).toString(); //get an array of Listing item (which at this point is a String)
-                JSONArray parsedItem = new JSONArray(unparsedItem);//parse Listing item of type String into an array
+                String unparsedItem = items.get(i).toString(); //get an array of com.apolets.main.Listing item (which at this point is a String)
+                JSONArray parsedItem = new JSONArray(unparsedItem);//parse com.apolets.main.Listing item of type String into an array
                 itemsList.add(new Listing(parsedItem));
 
             }
