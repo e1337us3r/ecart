@@ -19,7 +19,7 @@ public class PasswordValidator extends ValidatorBase {
 
     @Override
     protected void eval() {
-
+        //TODO: Localize these
         JFXPasswordField field = (JFXPasswordField) srcControl.get();
         if (!validate(field.getText())) {
             hasErrors.set(true);

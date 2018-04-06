@@ -3,7 +3,6 @@ package com.apolets.main;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,7 +14,7 @@ public abstract class API {
     private static JSONObject lastResponse = new JSONObject();
 
 
-    public static boolean hasError() {
+    private static boolean hasError() {
 
         return lastResponse.keySet().contains("error");
 
@@ -61,11 +60,15 @@ public abstract class API {
                     .field("password", password)
                     .asJson();
             lastResponse = jsonResponse.getBody().getObject();
-            return true;
+            if (!hasError()) {
+                return true;
+            }
+
 
 
         } catch (Exception e) {
             e.printStackTrace();
+            lastResponse.put("error", "Login request timed-out or failed.");
         }
 
         return false;
@@ -80,10 +83,14 @@ public abstract class API {
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .asJson();
             lastResponse = jsonResponse.getBody().getObject(); //Get json body
-            return true;
+            if (!hasError()) {
+                return true;
+            }
 
-        } catch (UnirestException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
+            lastResponse.put("error", "Login request timed-out or failed.");
         }
 
         return false;
@@ -101,12 +108,14 @@ public abstract class API {
                     .field("item_id", id_parameter)
                     .asJson();
             lastResponse = jsonResponse.getBody().getObject(); //Get json body
-            return true;
+            if (!hasError()) {
+                return true;
+            }
 
 
-        } catch (UnirestException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-
+            lastResponse.put("error", "Login request timed-out or failed.");
         }
         return false;
 
@@ -126,12 +135,14 @@ public abstract class API {
                     .field("category", item_category)
                     .asJson();
             lastResponse = jsonResponse.getBody().getObject(); //Get json body
-            return true;
+            if (!hasError()) {
+                return true;
+            }
 
 
-        } catch (UnirestException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-
+            lastResponse.put("error", "Login request timed-out or failed.");
         }
         return false;
     }
@@ -150,11 +161,14 @@ public abstract class API {
                     .field("category", listing.getCategory())
                     .asJson();
             lastResponse = jsonResponse.getBody().getObject(); //Get json body
-            return true;
+            if (!hasError()) {
+                return true;
+            }
 
-        } catch (UnirestException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
-
+            lastResponse.put("error", "Login request timed-out or failed.");
         }
         return false;
     }

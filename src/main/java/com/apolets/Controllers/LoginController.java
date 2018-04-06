@@ -3,10 +3,12 @@ package com.apolets.Controllers;
 import com.apolets.InputValidator.EmailValidator;
 import com.apolets.InputValidator.PasswordValidator;
 import com.apolets.InputValidator.RequiredValidator;
+import com.apolets.main.API;
 import com.apolets.main.fxMain;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
@@ -28,6 +30,7 @@ public class LoginController implements Initializable {
 
     public void initialize(URL location, ResourceBundle resources) {
 
+
         jf_email.setValidators(new RequiredValidator(), new EmailValidator());
         jf_password.setValidators(new RequiredValidator(), new PasswordValidator());
 
@@ -35,10 +38,27 @@ public class LoginController implements Initializable {
 
 
     public void login(ActionEvent e) {
-        if (jf_password.validate() && jf_email.validate()) {
-            System.out.println(jf_email.getText() + " logged in with password: " + jf_password.getText());
-            fxMain.exitLogin();
-        } else {
+        /*Had to use validate functions this way because if we put them directly in if condition
+          they get validated in one by one and if one validate
+          doesn't pass second one is not checked*/
+        boolean passwordCheck = jf_password.validate();
+        boolean emailCheck = jf_email.validate();
+        if (passwordCheck && emailCheck) {
+
+            //Standard Thread implementation doesn't work because of JavaFX rules
+            //so Platform.runLater is used instead
+            Platform.runLater(() -> {
+                boolean b = API.loginRequest(jf_email.getText(), jf_password.getText());
+                //TODO: Have a little animation between scene switch
+                //TODO: If password and email doesn't match give appropriate message to user
+                if (b)
+                    fxMain.switchToDashboard();
+                else System.out.println("");
+            });
+
+
+            System.out.println("pass");
+
 
         }
     }
@@ -48,6 +68,7 @@ public class LoginController implements Initializable {
         if (Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 
             try {
+                //TODO: Replace this url with sign up page once it is completed
                 Desktop.getDesktop().browse(new URI("http://www.yahoo.com"));
             } catch (IOException | URISyntaxException e1) {
                 e1.printStackTrace();

@@ -19,7 +19,7 @@ class APITest {
         String[] emails = {"thesakox@gmail.com", "fake@gmail.com", "testmember@gmail.com", "thesakox@gmail.com"};
         String[] passwords = {"wrong password", "123123", "123123", "123123"};
 
-        Boolean[] expectedResults = {true, true, true, true};
+        Boolean[] expectedResults = {false, false, false, true};
         Boolean[] results = new Boolean[expectedResults.length];
         for (int i = 0; i < emails.length; i++) {
             results[i] = API.loginRequest(emails[i], passwords[i]);
@@ -36,11 +36,8 @@ class APITest {
         API.loginRequest("thesakox@gmail.com", "123123");
 
         assertTrue(API.createListingRequest("test listing", "10.0", "test desc", "10", "http://testurl.com", "category 1"));
-        assertFalse(API.hasError());
-        assertTrue(API.createListingRequest("test listing", "10.0", "test desc", "10", "http://testurl.com", "qqqq"));
-        assertTrue(API.hasError());
-        assertTrue(API.createListingRequest("", "10.0", "test desc", "10", "http://testurl.com", "category 1"));
-        assertTrue(API.hasError());
+        assertFalse(API.createListingRequest("test listing", "10.0", "test desc", "10", "http://testurl.com", "qqqq"));
+        assertFalse(API.createListingRequest("", "10.0", "test desc", "10", "http://testurl.com", "category 1"));
     }
 
     @Test
@@ -48,13 +45,11 @@ class APITest {
 
         API.loginRequest("thesakox@gmail.com", "12312");
 
-        assertTrue(API.fetchAllListingsRequest());
-        assertTrue(API.hasError());
+        assertFalse(API.fetchAllListingsRequest());
 
         API.loginRequest("thesakox@gmail.com", "123123");
 
         assertTrue(API.fetchAllListingsRequest());
-        assertFalse(API.hasError());
 
 
     }
@@ -70,8 +65,6 @@ class APITest {
         listingIds.add(API.getMessage());
 
         assertTrue(API.deleteListingRequest(listingIds));
-        assertFalse(API.hasError());
-
 
     }
 
@@ -90,7 +83,6 @@ class APITest {
         newListing.setPrice(50000.5);
 
         assertTrue(API.updateListingRequest(newListing));
-        assertFalse(API.hasError());
 
     }
 
@@ -110,14 +102,12 @@ class APITest {
     @Test
     void hasError() {
 
-        API.loginRequest("thesakox@gmail.com", "wrong password"); //Invalid login
-        assertTrue(API.hasError());
+        assertFalse(API.loginRequest("thesakox@gmail.com", "wrong password")); //Invalid login
 
-        API.deleteListingRequest(new ArrayList<>()); //Unauthorized.
-        assertTrue(API.hasError());
 
-        API.fetchAllListingsRequest(); //Unauthorized.
-        assertTrue(API.hasError());
+        assertFalse(API.deleteListingRequest(new ArrayList<>())); //Unauthorized.
+
+        assertFalse(API.fetchAllListingsRequest()); //Unauthorized.
 
     }
 

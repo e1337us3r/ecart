@@ -18,7 +18,7 @@ public class EmailValidator extends ValidatorBase {
 
     @Override
     protected void eval() {
-
+        //TODO: Localize these
         JFXTextField field = (JFXTextField) srcControl.get();
         if (!validate(field.getText())) {
             hasErrors.set(true);
