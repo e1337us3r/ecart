@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class API {
 
-    private static final String SITEURL = "http://localhost/shop/api/";
+    private static final String SITEURL = "http://cors.apolets.com/shop/api/";
     private static JSONObject lastResponse = new JSONObject();
     public JSONObject lastResponseDynamic = new JSONObject();
 
@@ -64,7 +64,7 @@ public class API {
                     .field("password", password)
                     .asJson();
             lastResponse = jsonResponse.getBody().getObject();
-            if (!hasError()) {
+            if (!hasError() && getMessage().equalsIgnoreCase("Auth successful.")) {
                 return true;
             }
 

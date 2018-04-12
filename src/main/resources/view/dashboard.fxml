@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-1.0" prefHeight="475.0"
+            prefWidth="1000.0" styleClass="theme5" stylesheets="@guicss.css" xmlns="http://javafx.com/javafx/8.0.141"
+            fx:controller="com.apolets.Controllers.DashboardController">
+    <children>
+        <VBox prefHeight="587.0" prefWidth="185.0" styleClass="theme4" stylesheets="@guicss.css">
+            <children>
+                <Label prefHeight="55.0" prefWidth="187.0" styleClass="theme3" stylesheets="@guicss.css" text="E-cart"
+                       textFill="WHITE">
+                    <font>
+                        <Font name="Roboto Regular" size="27.0"/>
+                    </font>
+                    <padding>
+                        <Insets left="10.0"/>
+                    </padding>
+                </Label>
+                <JFXButton fx:id="navHomeButton" onAction="#showHome" prefHeight="60.0" prefWidth="219.0"
+                           stylesheets="@guicss.css" text="%dashboard.home">
+                    <graphic>
+                        <FontAwesomeIconView fill="#a1aec4" glyphName="HOME" size="20" textAlignment="JUSTIFY"
+                                             textOrigin="CENTER" wrappingWidth="89.0"/>
+                    </graphic>
+                    <styleClass>
+                        <String fx:value="theme4"/>
+                        <String fx:value="dashboard-button"/>
+                    </styleClass>
+                </JFXButton>
+                <JFXButton fx:id="navListingsButton" prefHeight="60.0" prefWidth="219.0" stylesheets="@guicss.css"
+                           text="%dashboard.listings">
+                    <styleClass>
+                        <String fx:value="theme4"/>
+                        <String fx:value="dashboard-button"/>
+                    </styleClass>
+                    <graphic>
+                        <FontAwesomeIconView fill="#a1aec4" glyphName="LIST" size="20" textAlignment="JUSTIFY"
+                                             wrappingWidth="70.0"/>
+                    </graphic>
+                </JFXButton>
+                <JFXButton fx:id="navOrdersButton" prefHeight="60.0" prefWidth="219.0" stylesheets="@guicss.css"
+                           text="%dashboard.orders">
+                    <styleClass>
+                        <String fx:value="theme4"/>
+                        <String fx:value="dashboard-button"/>
+                    </styleClass>
+                    <graphic>
+                        <FontAwesomeIconView fill="#a1aec4" glyphName="TRUCK" size="20"
+                                             wrappingWidth="81.7857141494751"/>
+                    </graphic>
+                </JFXButton>
+                <JFXButton fx:id="navAccountButton" prefHeight="60.0" prefWidth="219.0" stylesheets="@guicss.css"
+                           text="%dashboard.account">
+                    <styleClass>
+                        <String fx:value="theme4"/>
+                        <String fx:value="dashboard-button"/>
+                    </styleClass>
+                    <graphic>
+                        <FontAwesomeIconView fill="#a1aec4" glyphName="USER" size="20"
+                                             wrappingWidth="69.7857141494751"/>
+                    </graphic>
+                </JFXButton>
+            </children>
+        </VBox>
+        <AnchorPane fx:id="mainParent" layoutX="185.0" prefHeight="575.0" prefWidth="815.0" stylesheets="@guicss.css"/>
+    </children>
+</AnchorPane>

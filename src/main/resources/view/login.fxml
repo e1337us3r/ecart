@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="498.0" prefWidth="970.0" styleClass="theme5" stylesheets="@guicss.css"
+            xmlns="http://javafx.com/javafx/8.0.141" fx:controller="com.apolets.Controllers.LoginController">
+    <children>
+        <AnchorPane layoutX="46.0" layoutY="47.0" prefHeight="404.0" prefWidth="384.0" styleClass="theme4"
+                    stylesheets="@guicss.css">
+            <children>
+                <Label layoutX="159.0" layoutY="32.0" text="%login.signintitle" textFill="WHITE">
+                    <font>
+                        <Font name="Calibri Bold" size="24.0"/>
+                    </font>
+                </Label>
+                <JFXTextField fx:id="jf_email" focusColor="WHITE" labelFloat="true" layoutX="50.0" layoutY="117.0"
+                              prefHeight="25.0" prefWidth="292.0" promptText="%login.emailprompt" styleClass="fieldpass"
+                              stylesheets="@guicss.css"/>
+                <JFXPasswordField fx:id="jf_password" focusColor="WHITE" labelFloat="true" layoutX="47.0"
+                                  layoutY="214.0" prefHeight="25.0" prefWidth="292.0" promptText="%login.passprompt"
+                                  styleClass="fieldpass" stylesheets="@guicss.css"/>
+                <JFXButton fx:id="jb_login" buttonType="RAISED" layoutX="143.0" layoutY="278.0" onAction="#login"
+                           prefHeight="25.0" prefWidth="99.0" styleClass="theme1" stylesheets="@guicss.css"
+                           text="%login.enter"/>
+                <Hyperlink fx:id="jlink_forgot" layoutX="50.0" layoutY="326.0" text="%login.forgot"/>
+            </children>
+        </AnchorPane>
+        <Label layoutX="507.0" layoutY="100.0" prefHeight="86.0" prefWidth="415.0" text="%login.slogan"
+               textFill="WHITE">
+            <font>
+                <Font name="Calibri Bold" size="40.0"/>
+            </font>
+            <effect>
+                <DropShadow/>
+            </effect>
+        </Label>
+        <Label layoutX="514.0" layoutY="160.0" prefHeight="86.0" prefWidth="401.0"
+               text="Join thousand of merchants today and take your businness online." textFill="WHITE" wrapText="true">
+            <font>
+                <Font name="Calibri" size="23.0"/>
+            </font>
+            <effect>
+                <DropShadow/>
+            </effect>
+        </Label>
+        <ImageView fitHeight="508.0" fitWidth="510.0" layoutX="467.0" layoutY="-3.0" opacity="0.18" pickOnBounds="true">
+            <image>
+                <Image url="@e-shop.png"/>
+            </image>
+        </ImageView>
+        <JFXButton fx:id="jb_signup" buttonType="RAISED" layoutX="620.0" layoutY="271.0" onAction="#signup"
+                   prefHeight="28.0" prefWidth="190.0" ripplerFill="WHITE" styleClass="theme1" stylesheets="@guicss.css"
+                   text="%login.signup"/>
+        <Label layoutX="625.0" layoutY="53.0" text="e-cart.com" textFill="WHITE">
+            <font>
+                <Font name="Bauhaus 93" size="40.0"/>
+            </font>
+            <effect>
+                <DropShadow radius="4.81" width="0.24"/>
+            </effect>
+        </Label>
+    </children>
+</AnchorPane>

@@ -1,0 +1,70 @@
+.theme5 {
+    -fx-background-color: #0d1b2a;
+}
+
+.theme4 {
+    -fx-background-color: #1b263b;
+}
+
+.theme3 {
+    -fx-background-color: #415a77;
+}
+
+.theme2 {
+    -fx-background-color: #778da9;
+}
+
+.theme1 {
+    -fx-background-color: #e0e1dd;
+}
+
+.fieldpass {
+    -fx-text-fill: #fff;
+    -jfx-unfocus-color: #d1d1d1;
+
+}
+
+.fieldfail {
+    -fx-text-fill: #fff;
+    -jfx-unfocus-color: #e51010;
+
+}
+
+.dashboard-button {
+    -fx-text-fill: #e0e1dd;
+    -fx-font-family: 'Roboto';
+    -fx-font-size: 20px;
+}
+
+.dashboard-button:hover {
+    -fx-background-color: #0d1b2a;
+}
+
+.dashboard-button:pressed {
+    -fx-background-color: #2A3F54;
+}
+
+.home-selected {
+    -fx-border-color: yellow;
+}
+
+.white-text {
+    -fx-text-fill: #e0e1dd;
+    -fx-font-family: 'Roboto';
+    -fx-font-size: 20px;
+}
+
+.time-picker {
+    -fx-prompt-text-fill: #e0e1dd;
+    -fx-font-family: 'Roboto';
+    -fx-font-size: 12px;
+    -fx-text-fill: WHITE;
+    -fx-text-inner-color: red;
+}
+
+.time-picker:selected {
+    -fx-background-color: #263146;
+    -fx-text-fill: WHITE;
+    -fx-prompt-text-fill: #e0e1dd;
+    -fx-text-inner-color: red;
+}
