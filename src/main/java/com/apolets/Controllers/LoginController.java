@@ -11,6 +11,8 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
 
 import java.awt.*;
@@ -48,12 +50,14 @@ public class LoginController implements Initializable {
             //Standard Thread implementation doesn't work because of JavaFX rules
             //so Platform.runLater is used instead
             Platform.runLater(() -> {
-                boolean b = API.loginRequest(jf_email.getText(), jf_password.getText());
+                boolean loginSuccess = API.loginRequest(jf_email.getText(), jf_password.getText());
                 //TODO: Have a little animation between scene switch
-                //TODO: If password and email doesn't match give appropriate message to user
-                if (b)
+                if (loginSuccess)
                     fxMain.switchToDashboard();
-                else System.out.println("");
+                else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, API.getError(), ButtonType.OK);
+                    alert.showAndWait();
+                }
             });
 
 

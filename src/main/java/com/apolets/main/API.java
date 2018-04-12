@@ -6,12 +6,16 @@ import com.mashape.unirest.http.Unirest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public abstract class API {
+public class API {
 
     private static final String SITEURL = "http://localhost/shop/api/";
     private static JSONObject lastResponse = new JSONObject();
+    public JSONObject lastResponseDynamic = new JSONObject();
 
 
     private static boolean hasError() {
@@ -173,5 +177,63 @@ public abstract class API {
         return false;
     }
 
+    //these methods are not static because they will be used with multiple threads and that would cause problems in future
+    public double calculateTotalFinanceInfo() {
+        Double total = 0.0;
+
+
+        JSONArray entries = lastResponseDynamic.getJSONArray("items");
+        for (int i = 0; i < entries.length(); i++) {
+            JSONArray entry = entries.getJSONArray(i);
+            total += entry.getDouble(1);
+        }
+
+
+        return total;
+    }
+
+    public boolean getFinanceInfoRequest(String timePeriod, String status) {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime current_date = LocalDateTime.now();
+        String url = SITEURL + "finance_info.php";
+        try {
+            HttpResponse<JsonNode> jsonResponse = Unirest.get(url)
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .queryString("time", timePeriod)
+                    .queryString("date", dtf.format(current_date))
+                    .queryString("status", status)
+                    .asJson();
+
+            lastResponseDynamic = jsonResponse.getBody().getObject(); //Get json body
+
+            if (!hasError()) {
+                return true;
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //System.out.println(lastResponse);
+            lastResponse.put("error", "Request timed-out or failed.");
+        }
+        return false;
+    }
+
+    public HashMap<Integer, Double> getGraphContent(int units) {
+
+        HashMap<Integer, Double> map = new HashMap<>();
+        for (int i = 1; i <= units; i++) {
+            map.put(i, 0.0);
+        }
+        JSONArray entries = lastResponseDynamic.getJSONArray("items");
+        for (int i = 0; i < entries.length(); i++) {
+            JSONArray entry = entries.getJSONArray(i);
+            map.put(entry.getInt(0), entry.getDouble(1));
+        }
+
+
+        return map;
+    }
 
 }

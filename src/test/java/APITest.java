@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,7 +74,7 @@ class APITest {
 
         API.loginRequest("thesakox@gmail.com", "123123");
 
-        Listing newListing = new Listing(3, "test listing", 10.0, "test desc", 5, "2018-03-23", 0, "category 1", "http://testurl.com");
+        Listing newListing = new Listing(3, "test listing", 10.0, "test desc", 5, LocalDateTime.now(), 0, "category 1", "http://testurl.com");
 
         API.createListingRequest(newListing.getName(), String.valueOf(newListing.getPrice()), newListing.getDesc(), String.valueOf(newListing.getStock()), newListing.getStoreImage(), newListing.getCategory());
 

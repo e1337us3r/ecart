@@ -2,6 +2,8 @@ package com.apolets.main;
 
 import org.json.JSONArray;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 
 public class Listing implements Comparable<Listing> {
@@ -11,26 +13,27 @@ public class Listing implements Comparable<Listing> {
     private double price;
     private String desc;
     private int stock;
-    private String listDate;
+    private LocalDateTime listDate;
     private int rating;
     private String category;
     private String storeImage;
     private HashSet<String> additionalImages = new HashSet<>();
 
 
-    public Listing(int id, String name, float price, String desc, int stock, String listDate, int rating, String category, String storeImage, HashSet<String> additionalImages) {
+    public Listing(int id, String name, float price, String desc, int stock, LocalDateTime listDate, int rating, String category, String storeImage, HashSet<String> additionalImages) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.desc = desc;
         this.stock = stock;
+        this.category = category;
         this.listDate = listDate;
         this.rating = rating;
         this.additionalImages=additionalImages;
         this.storeImage = storeImage;
     }
 
-    public Listing(int id, String name, double price, String desc, int stock, String listDate, int rating, String category, String storeImage) {
+    public Listing(int id, String name, double price, String desc, int stock, LocalDateTime listDate, int rating, String category, String storeImage) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -48,7 +51,8 @@ public class Listing implements Comparable<Listing> {
         this.price = jsonArray.getDouble(ItemCode.PRICE);
         this.desc = jsonArray.getString(ItemCode.DESCRIPTION);
         this.stock = jsonArray.getInt(ItemCode.STOCK);
-        this.listDate = jsonArray.getString(ItemCode.LISTDATE);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.listDate = LocalDateTime.parse(jsonArray.getString(ItemCode.LISTDATE), formatter);
         this.rating = jsonArray.getInt(ItemCode.RATING);
         this.category = jsonArray.getString(ItemCode.CATEGORY);
         this.storeImage = jsonArray.getString(ItemCode.IMAGE);
@@ -102,7 +106,7 @@ public class Listing implements Comparable<Listing> {
         this.id = id;
     }
 
-    public String getListDate() {
+    public LocalDateTime getListDate() {
         return listDate;
     }
 

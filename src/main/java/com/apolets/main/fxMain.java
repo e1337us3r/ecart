@@ -27,11 +27,16 @@ public class fxMain extends Application {
     }
 
     public static void switchToDashboard() {
+        try {
+            dashboardScene = FXMLLoader.load(fxMain.class.getResource("/view/dashboard.fxml"), languageBundle);
+            window.setTitle("E-cart.com Merchant Client v.01");
+            window.setScene(new Scene(dashboardScene));
+            window.setResizable(false);
+            window.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        window.setTitle("E-cart.com Merchant Client v.01");
-        window.setScene(new Scene(dashboardScene));
-        window.setResizable(false);
-        window.show();
     }
 
     @Override
@@ -40,10 +45,10 @@ public class fxMain extends Application {
         window = primaryStage;
 
         try {
-            dashboardScene = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"), languageBundle);
+
             loginScene = FXMLLoader.load(getClass().getResource("/view/login.fxml"), languageBundle);
             window.setTitle("E-cart.com Merchant Client v.01");
-            window.setScene(new Scene(dashboardScene));
+            window.setScene(new Scene(loginScene));
             window.setResizable(false);
             window.show();
         } catch (IOException e) {
