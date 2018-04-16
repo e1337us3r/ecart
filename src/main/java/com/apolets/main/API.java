@@ -3,6 +3,8 @@ package com.apolets.main;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,7 +15,7 @@ import java.util.HashMap;
 
 public class API {
 
-    private static final String SITEURL = "http://cors.apolets.com/shop/api/";
+    private static final String SITEURL = "http://localhost/shop/api/";
     private static JSONObject lastResponse = new JSONObject();
     public JSONObject lastResponseDynamic = new JSONObject();
 
@@ -37,9 +39,9 @@ public class API {
     }
 
 
-    public static ArrayList<Listing> fetchAllListingsPayload() {
+    public static ObservableList<Listing> fetchAllListingsPayload() {
 
-        ArrayList<Listing> itemsList = new ArrayList<>();
+        ObservableList<Listing> itemsList = FXCollections.observableArrayList();
         if (lastResponse.keySet().contains("items")) {
             JSONArray items = (JSONArray) lastResponse.get("items"); //json 'items' is array of arrays
             for (int i = 0; i < items.length(); i++) {

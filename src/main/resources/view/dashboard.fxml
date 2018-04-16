@@ -34,7 +34,8 @@
                         <String fx:value="dashboard-button"/>
                     </styleClass>
                 </JFXButton>
-                <JFXButton fx:id="navListingsButton" prefHeight="60.0" prefWidth="219.0" stylesheets="@guicss.css"
+                <JFXButton onAction="#showListings" fx:id="navListingsButton" prefHeight="60.0" prefWidth="219.0"
+                           stylesheets="@guicss.css"
                            text="%dashboard.listings">
                     <styleClass>
                         <String fx:value="theme4"/>

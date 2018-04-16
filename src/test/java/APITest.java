@@ -3,11 +3,12 @@ import com.apolets.main.Listing;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mashape.unirest.http.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
+import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,6 +38,7 @@ class APITest {
         API.loginRequest("thesakox@gmail.com", "123123");
 
         assertTrue(API.createListingRequest("test listing", "10.0", "test desc", "10", "http://testurl.com", "category 1"));
+        System.out.println(API.getError());
         assertFalse(API.createListingRequest("test listing", "10.0", "test desc", "10", "http://testurl.com", "qqqq"));
         assertFalse(API.createListingRequest("", "10.0", "test desc", "10", "http://testurl.com", "category 1"));
     }
@@ -74,7 +76,7 @@ class APITest {
 
         API.loginRequest("thesakox@gmail.com", "123123");
 
-        Listing newListing = new Listing(3, "test listing", 10.0, "test desc", 5, LocalDateTime.now(), 0, "category 1", "http://testurl.com");
+        Listing newListing = new Listing(3, "test listing", 10.0, 5, "test desc", 5, LocalDate.now(), 0, "category 1", "http://testurl.com");
 
         API.createListingRequest(newListing.getName(), String.valueOf(newListing.getPrice()), newListing.getDesc(), String.valueOf(newListing.getStock()), newListing.getStoreImage(), newListing.getCategory());
 
@@ -94,7 +96,7 @@ class APITest {
         API.createListingRequest("test listing", "10.0", "test desc", "10", "http://testurl.com", "category 1");
         API.fetchAllListingsRequest();
 
-        ArrayList<Listing> listins = API.fetchAllListingsPayload();
+        ObservableList<Listing> listins = API.fetchAllListingsPayload();
 
         assertTrue(listins.size() > 0);
 

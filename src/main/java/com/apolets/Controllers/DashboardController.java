@@ -23,10 +23,12 @@ public class DashboardController implements Initializable {
     public AnchorPane mainParent;
 
     private Node home = null;
-
+    private Node listings = null;
 
     private void changeView(Node node) {
+
         Platform.runLater(() -> {
+
             mainParent.getChildren().clear();
             mainParent.getChildren().add(node);
         });
@@ -51,6 +53,28 @@ public class DashboardController implements Initializable {
     public void showHome() {
         changeView(home);
     }
+
+    public void showListings() {
+        if (listings == null) {
+            try {
+
+                ListingsController controller = new ListingsController();
+                controller.setMain(mainParent);
+                //Send main parent to controller so that it can use it to display its child views such as update/create
+                //listing views
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/listings.fxml"), fxMain.languageBundle);
+                loader.setController(controller);
+
+
+                listings = loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        changeView(listings);
+    }
+
 
 
 }

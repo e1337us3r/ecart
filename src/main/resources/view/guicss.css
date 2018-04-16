@@ -54,6 +54,15 @@
     -fx-font-size: 20px;
 }
 
+.listings-button {
+
+    -fx-text-fill: #e0e1dd;
+    -fx-font-family: 'Roboto';
+    -fx-font-size: 16px;
+    -fx-background-color: #1b263b;
+
+}
+
 .time-picker {
     -fx-prompt-text-fill: #e0e1dd;
     -fx-font-family: 'Roboto';
@@ -67,4 +76,17 @@
     -fx-text-fill: WHITE;
     -fx-prompt-text-fill: #e0e1dd;
     -fx-text-inner-color: red;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #1b263b;
+}
+
+.tab {
+    -fx-text-fill: WHITE;
+    -fx-background-color: #1b263b;
+}
+
+.tab-label {
+    -fx-text-fill: WHITE;
 }
