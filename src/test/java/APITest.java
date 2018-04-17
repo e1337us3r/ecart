@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class APITest {
 
+    final String imagepath = "C:\\Users\\AVA\\IdeaProjects\\testapimaven\\src\\main\\resources\\view\\e-shop.png";
 
     @Test
     void loginRequest() {
@@ -37,10 +39,10 @@ class APITest {
     void createListingRequest() {
         API.loginRequest("thesakox@gmail.com", "123123");
 
-        assertTrue(API.createListingRequest("test listing", "10.0", "test desc", "10", "http://testurl.com", "category 1"));
-        System.out.println(API.getError());
-        assertFalse(API.createListingRequest("test listing", "10.0", "test desc", "10", "http://testurl.com", "qqqq"));
-        assertFalse(API.createListingRequest("", "10.0", "test desc", "10", "http://testurl.com", "category 1"));
+        assertTrue(API.createListingRequest("test listing", 10.0, "test desc", 10, new File(imagepath), "category 1", 122.0));
+        assertFalse(API.createListingRequest("test listing", 10.0, "test desc", 10, new File(imagepath), "cat", 122.0));
+        assertFalse(API.createListingRequest("te", 10.0, "test desc", 10, new File(imagepath), "category 1", 122.0));
+        System.out.println();
     }
 
     @Test
@@ -62,7 +64,7 @@ class APITest {
 
         API.loginRequest("thesakox@gmail.com", "123123");
 
-        API.createListingRequest("test listing", "10.0", "test desc", "10", "http://testurl.com", "category 1");
+        API.createListingRequest("test listing", 10.0, "test desc", 10, new File(imagepath), "category 1", 122.0);
 
         ArrayList<String> listingIds = new ArrayList<>();
         listingIds.add(API.getMessage());
@@ -78,14 +80,15 @@ class APITest {
 
         Listing newListing = new Listing(3, "test listing", 10.0, 5, "test desc", 5, LocalDate.now(), 0, "category 1", "http://testurl.com");
 
-        API.createListingRequest(newListing.getName(), String.valueOf(newListing.getPrice()), newListing.getDesc(), String.valueOf(newListing.getStock()), newListing.getStoreImage(), newListing.getCategory());
+        API.createListingRequest(newListing.getName(), newListing.getPrice(), newListing.getDesc(), newListing.getStock(), new File(imagepath), newListing.getCategory(), newListing.getCost());
 
         String listingId = API.getMessage();
-
+        System.out.println(listingId);
         newListing.setId(Integer.parseInt(listingId));
         newListing.setPrice(50000.5);
-
-        assertTrue(API.updateListingRequest(newListing));
+        File pic = null;
+        boolean b = API.updateListingRequest(newListing, pic);
+        assertTrue(b);
 
     }
 
@@ -93,7 +96,7 @@ class APITest {
     void fetchAllListingsPayload() {
 
         API.loginRequest("thesakox@gmail.com", "123123");
-        API.createListingRequest("test listing", "10.0", "test desc", "10", "http://testurl.com", "category 1");
+        API.createListingRequest("test listing", 10.0, "test desc", 10, new File("..../main/java/resources/view/e-shop.png"), "category 1", 122.0);
         API.fetchAllListingsRequest();
 
         ObservableList<Listing> listins = API.fetchAllListingsPayload();

@@ -39,6 +39,7 @@ public class CRUDListingController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+
         if (existingListing != null) {
             txtName.setText(existingListing.getName());
             txtDesc.setText(existingListing.getDesc());

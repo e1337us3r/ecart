@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -128,17 +129,18 @@ public class API {
     }
 
 
-    public static boolean createListingRequest(String item_name, String item_price, String item_description, String item_stock, String item_pic, String item_category) {
+    public static boolean createListingRequest(String item_name, Double item_price, String item_description, int item_stock, File item_pic, String item_category, Double cost) {
         String url = SITEURL + "create_item.php";
         try {
             HttpResponse<JsonNode> jsonResponse = Unirest.post(url)
-                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .header("accept", "application/json")
                     .field("name", item_name)
                     .field("price", item_price)
                     .field("description", item_description)
                     .field("stock", item_stock)
                     .field("pic", item_pic)
                     .field("category", item_category)
+                    .field("cost", cost)
                     .asJson();
             lastResponse = jsonResponse.getBody().getObject(); //Get json body
             if (!hasError()) {
@@ -153,19 +155,21 @@ public class API {
         return false;
     }
 
-    public static boolean updateListingRequest(Listing listing) {
+    public static boolean updateListingRequest(Listing listing, File pic) {
         String url = SITEURL + "update_item.php";
         try {
             HttpResponse<JsonNode> jsonResponse = Unirest.post(url)
-                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .header("accept", "application/json")
                     .field("id", listing.getId())
                     .field("name", listing.getName())
                     .field("price", listing.getPrice())
                     .field("description", listing.getDesc())
                     .field("stock", listing.getStock())
-                    .field("pic", listing.getStoreImage())
+                    .field("pic", (pic == null) ? "" : pic)
                     .field("category", listing.getCategory())
+                    .field("cost", listing.getCost())
                     .asJson();
+
             lastResponse = jsonResponse.getBody().getObject(); //Get json body
             if (!hasError()) {
                 return true;
