@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" focusTraversable="true" prefHeight="100.0" prefWidth="100.0"
+           styleClass="image-pane-add" stylesheets="@guicss.css" xmlns="http://javafx.com/javafx/8.0.141">
+    <children>
+        <ImageView fx:id="imageView" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true">
+            <image>
+                <Image url="@e-shop.png"/>
+            </image>
+        </ImageView>
+    </children>
+    <cursor>
+        <Cursor fx:constant="HAND"/>
+    </cursor>
+</StackPane>

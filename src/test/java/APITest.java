@@ -11,12 +11,16 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class APITest {
 
-    final String imagepath = "C:\\Users\\AVA\\IdeaProjects\\testapimaven\\src\\main\\resources\\view\\e-shop.png";
+    private final String imagepath = "C:\\Users\\AVA\\IdeaProjects\\testapimaven\\src\\main\\resources\\view\\e-shop.png";
+
+    private final List<File> image = Collections.singletonList(new File(imagepath));
 
     @Test
     void loginRequest() {
@@ -38,11 +42,10 @@ class APITest {
     @Test
     void createListingRequest() {
         API.loginRequest("thesakox@gmail.com", "123123");
+        assertTrue(API.createListingRequest("test listing", 10.0, "test desc", 10, "category 1", 122.0, image));
+        assertFalse(API.createListingRequest("test listing", 10.0, "test desc", 10, "cat", 122.0, image));
+        assertFalse(API.createListingRequest("te", 10.0, "test desc", 10, "category 1", 122.0, image));
 
-        assertTrue(API.createListingRequest("test listing", 10.0, "test desc", 10, new File(imagepath), "category 1", 122.0));
-        assertFalse(API.createListingRequest("test listing", 10.0, "test desc", 10, new File(imagepath), "cat", 122.0));
-        assertFalse(API.createListingRequest("te", 10.0, "test desc", 10, new File(imagepath), "category 1", 122.0));
-        System.out.println();
     }
 
     @Test
@@ -64,12 +67,11 @@ class APITest {
 
         API.loginRequest("thesakox@gmail.com", "123123");
 
-        API.createListingRequest("test listing", 10.0, "test desc", 10, new File(imagepath), "category 1", 122.0);
+        API.createListingRequest("test listing", 10.0, "test desc", 10, "category 1", 122.0, image);
 
-        ArrayList<String> listingIds = new ArrayList<>();
-        listingIds.add(API.getMessage());
+        Listing newListing = new Listing(API.getMessage());
 
-        assertTrue(API.deleteListingRequest(listingIds));
+        assertTrue(API.deleteListingRequest(newListing.getId()));
 
     }
 
@@ -80,15 +82,15 @@ class APITest {
 
         Listing newListing = new Listing(3, "test listing", 10.0, 5, "test desc", 5, LocalDate.now(), 0, "category 1", "http://testurl.com");
 
-        API.createListingRequest(newListing.getName(), newListing.getPrice(), newListing.getDesc(), newListing.getStock(), new File(imagepath), newListing.getCategory(), newListing.getCost());
+        API.createListingRequest(newListing.getName(), newListing.getPrice(), newListing.getDesc(), newListing.getStock(), newListing.getCategory(), newListing.getCost(), image);
 
-        String listingId = API.getMessage();
-        System.out.println(listingId);
-        newListing.setId(Integer.parseInt(listingId));
+        int listingId = new Listing(API.getMessage()).getId();
+        //System.out.println(listingId);
+        newListing.setId(listingId);
         newListing.setPrice(50000.5);
         File pic = null;
-        boolean b = API.updateListingRequest(newListing, pic);
-        assertTrue(b);
+        boolean result = API.updateListingRequest(newListing, new ArrayList<>(), new ArrayList<>(), "");
+        assertTrue(result);
 
     }
 
@@ -96,7 +98,8 @@ class APITest {
     void fetchAllListingsPayload() {
 
         API.loginRequest("thesakox@gmail.com", "123123");
-        API.createListingRequest("test listing", 10.0, "test desc", 10, new File("..../main/java/resources/view/e-shop.png"), "category 1", 122.0);
+        API.createListingRequest("test listing", 10.0, "test desc", 10, "category 1", 122.0, image);
+        API.createListingRequest("test listing", 10.0, "test desc", 10, "category 1", 122.0, image);
         API.fetchAllListingsRequest();
 
         ObservableList<Listing> listins = API.fetchAllListingsPayload();
@@ -111,7 +114,7 @@ class APITest {
         assertFalse(API.loginRequest("thesakox@gmail.com", "wrong password")); //Invalid login
 
 
-        assertFalse(API.deleteListingRequest(new ArrayList<>())); //Unauthorized.
+        assertFalse(API.deleteListingRequest(2)); //Unauthorized.
 
         assertFalse(API.fetchAllListingsRequest()); //Unauthorized.
 
@@ -124,7 +127,7 @@ class APITest {
         res = API.getError();
         assertEquals("Password is incorrect.", res);
 
-        API.deleteListingRequest(new ArrayList<>()); //Unauthorized.
+        API.deleteListingRequest(2); //Unauthorized.
         res = API.getError();
         assertEquals("Unauthorized.", res);
 
@@ -146,9 +149,8 @@ class APITest {
         res = API.getMessage();
         assertEquals("Already Logged In.", res);
 
-        ArrayList<String> tempList = new ArrayList<>();
-        tempList.add("99999999999");//This listing id cannot exist.
-        API.deleteListingRequest(tempList);
+
+        API.deleteListingRequest(999999999);
         res = API.getMessage();
         assertEquals("Listings deleted : 0", res);
     }

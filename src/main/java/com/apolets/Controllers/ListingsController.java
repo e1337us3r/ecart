@@ -29,7 +29,7 @@ public class ListingsController implements Initializable {
     public JFXButton createListingButton;
     public JFXButton updateListingButton;
     public AnchorPane rootPane;
-    private TreeItem<Listing> treeRoot = null;
+    public static TreeItem<Listing> treeRoot = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -73,6 +73,7 @@ public class ListingsController implements Initializable {
         JFXTreeTableColumn<Listing, Integer> stockCol = new JFXTreeTableColumn<>("Stock");
         JFXTreeTableColumn<Listing, LocalDate> dateCol = new JFXTreeTableColumn<>("Release Date");
         JFXTreeTableColumn<Listing, String> categoryCol = new JFXTreeTableColumn<>("Category");
+        JFXTreeTableColumn<Listing, Integer> ratingCol = new JFXTreeTableColumn<>("Rating");
 
         //ADD COLUMNS TO TABLE
         listingsTable.getColumns().addAll(nameCol, descCol, priceCol, costCol, stockCol, dateCol, categoryCol);
@@ -85,6 +86,7 @@ public class ListingsController implements Initializable {
         stockCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("stock"));
         dateCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("listDate"));
         categoryCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("category"));
+        ratingCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("rating"));
     }
 
     public void refreshItems() {
@@ -104,7 +106,11 @@ public class ListingsController implements Initializable {
     }
 
     public void deleteListing() {
-        selectedListingItem.getParent().getChildren().remove(selectedListingItem); //remove the selected node from it's parent's children.
+
+        boolean result = API.deleteListingRequest(selectedListingItem.getValue().getId());
+        if (result) {
+            selectedListingItem.getParent().getChildren().remove(selectedListingItem); //remove the selected node from it's parent's children.
+        } else System.out.println(API.getError());
 
     }
 
@@ -118,11 +124,15 @@ public class ListingsController implements Initializable {
         Platform.runLater(() -> {
             try {
 
-                CRUDListingController controller = new CRUDListingController();
-                controller.setRoot(rootPane);
+                CRUDListingsController controller;
+
                 if (update) {
-                    controller.setListing(selectedListingItem.getValue());  //if update button is clicked send selected listing to controller
+                    controller = new UpdateListingController(selectedListingItem.getValue(), listingsTable);
+                } else {
+                    controller = new CreateListingController(listingsTable);
                 }
+                controller.setParent(rootPane);
+
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/crudListing.fxml"), fxMain.languageBundle);
                 loader.setController(controller);
 

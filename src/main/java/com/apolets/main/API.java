@@ -3,20 +3,23 @@ package com.apolets.main;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.request.body.MultipartBody;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class API {
 
-    private static final String SITEURL = "http://localhost/shop/api/";
+    public static final String SITEURL = "http://localhost/shop/";
     private static JSONObject lastResponse = new JSONObject();
     public JSONObject lastResponseDynamic = new JSONObject();
 
@@ -44,12 +47,9 @@ public class API {
 
         ObservableList<Listing> itemsList = FXCollections.observableArrayList();
         if (lastResponse.keySet().contains("items")) {
-            JSONArray items = (JSONArray) lastResponse.get("items"); //json 'items' is array of arrays
+            JSONArray items = (JSONArray) lastResponse.get("items"); //json 'items' is array of objects
             for (int i = 0; i < items.length(); i++) {
-                String unparsedItem = items.get(i).toString(); //get an array of com.apolets.main.Listing item (which at this point is a String)
-                JSONArray parsedItem = new JSONArray(unparsedItem);//parse com.apolets.main.Listing item of type String into an array
-                itemsList.add(new Listing(parsedItem));
-
+                itemsList.add(new Listing(items.getJSONObject(i)));
             }
         }
         return itemsList;
@@ -58,7 +58,7 @@ public class API {
 
     public static boolean loginRequest(String email, String password) {
 
-        String url = SITEURL + "login.php";
+        String url = SITEURL + "api/login.php";
 
         try {
             HttpResponse<JsonNode> jsonResponse = Unirest.post(url)
@@ -83,7 +83,7 @@ public class API {
 
     public static boolean fetchAllListingsRequest() {
 
-        String url = SITEURL + "fetch_item.php";
+        String url = SITEURL + "api/fetch_item.php";
 
         try {
             HttpResponse<JsonNode> jsonResponse = Unirest.get(url)
@@ -104,15 +104,14 @@ public class API {
     }
 
 
-    public static boolean deleteListingRequest(ArrayList<String> item_ids) {
+    public static boolean deleteListingRequest(int item_id) {
 
-        String id_parameter = String.join(",", item_ids);
 
-        String url = SITEURL + "delete_item.php";
+        String url = SITEURL + "api/delete_item.php";
         try {
             HttpResponse<JsonNode> jsonResponse = Unirest.post(url)
                     .header("Content-Type", "application/x-www-form-urlencoded")
-                    .field("item_id", id_parameter)
+                    .field("item_id", item_id)
                     .asJson();
             lastResponse = jsonResponse.getBody().getObject(); //Get json body
             if (!hasError()) {
@@ -129,19 +128,24 @@ public class API {
     }
 
 
-    public static boolean createListingRequest(String item_name, Double item_price, String item_description, int item_stock, File item_pic, String item_category, Double cost) {
-        String url = SITEURL + "create_item.php";
+    public static boolean createListingRequest(String listing_name, Double listing_price, String listing_description, int listing_stock, String listing_category, Double listing_cost, List<File> listing_pics) {
+        String url = SITEURL + "api/create_item.php";
         try {
-            HttpResponse<JsonNode> jsonResponse = Unirest.post(url)
+            MultipartBody mb = Unirest.post(url)
                     .header("accept", "application/json")
-                    .field("name", item_name)
-                    .field("price", item_price)
-                    .field("description", item_description)
-                    .field("stock", item_stock)
-                    .field("pic", item_pic)
-                    .field("category", item_category)
-                    .field("cost", cost)
-                    .asJson();
+                    .field("name", listing_name)
+                    .field("price", listing_price)
+                    .field("description", listing_description)
+                    .field("stock", listing_stock)
+                    .field("category", listing_category)
+                    .field("cost", listing_cost);
+
+            for (File f : listing_pics) {
+                mb.field("pic[]", f);
+            }
+
+
+            HttpResponse<JsonNode> jsonResponse = mb.asJson();
             lastResponse = jsonResponse.getBody().getObject(); //Get json body
             if (!hasError()) {
                 return true;
@@ -155,20 +159,30 @@ public class API {
         return false;
     }
 
-    public static boolean updateListingRequest(Listing listing, File pic) {
-        String url = SITEURL + "update_item.php";
+    public static Listing getListing() {
+        return new Listing(lastResponse.getJSONObject("message"));
+    }
+
+
+    public static boolean updateListingRequest(Listing listing, ArrayList<File> additionalImages, ArrayList<String> deletedImages, String profileImage) {
+        String url = SITEURL + "api/update_item.php";
         try {
-            HttpResponse<JsonNode> jsonResponse = Unirest.post(url)
+            MultipartBody preparedRequest = Unirest.post(url)
                     .header("accept", "application/json")
                     .field("id", listing.getId())
                     .field("name", listing.getName())
                     .field("price", listing.getPrice())
                     .field("description", listing.getDesc())
                     .field("stock", listing.getStock())
-                    .field("pic", (pic == null) ? "" : pic)
                     .field("category", listing.getCategory())
-                    .field("cost", listing.getCost())
-                    .asJson();
+                    .field("cost", listing.getCost());
+
+            additionalImages.forEach((File f) -> preparedRequest.field("additionalImages[]", f));
+            deletedImages.forEach((String image) -> preparedRequest.field("deletedImages[]", image));
+            if (profileImage.startsWith("file")) preparedRequest.field("profilePic", new File(new URI(profileImage)));
+
+
+            HttpResponse<JsonNode> jsonResponse = preparedRequest.asJson();
 
             lastResponse = jsonResponse.getBody().getObject(); //Get json body
             if (!hasError()) {
@@ -178,7 +192,7 @@ public class API {
 
         } catch (Exception e) {
             e.printStackTrace();
-            lastResponse.put("error", "Login request timed-out or failed.");
+            lastResponse.put("error", "Request timed-out or failed.");
         }
         return false;
     }
@@ -202,7 +216,7 @@ public class API {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime current_date = LocalDateTime.now();
-        String url = SITEURL + "finance_info.php";
+        String url = SITEURL + "api/finance_info.php";
         try {
             HttpResponse<JsonNode> jsonResponse = Unirest.get(url)
                     .header("Content-Type", "application/x-www-form-urlencoded")

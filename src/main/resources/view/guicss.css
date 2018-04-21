@@ -90,3 +90,17 @@
 .tab-label {
     -fx-text-fill: WHITE;
 }
+
+.image-pane-add {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
+    -fx-background-color: rgba(5, 12, 51, 0.664);
+    -fx-background-radius: 5;
+}
+
+.image-pane-add:hover {
+    -fx-background-color: rgba(255, 0, 0, 0.479);
+}
+
+.image-pane-add::selection {
+    -fx-background-color: rgba(255, 0, 0, 0.479);
+}

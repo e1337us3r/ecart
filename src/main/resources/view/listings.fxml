@@ -25,21 +25,21 @@
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"
                                             styleClass="theme5" stylesheets="@guicss.css">
                                     <children>
-                                        <JFXTreeTableView fx:id="listingsTable" layoutX="14.0" layoutY="7.0"
-                                                          prefHeight="510.0" prefWidth="790.0"
+                                        <JFXTreeTableView fx:id="listingsTable" layoutX="13.0" layoutY="18.0"
+                                                          prefHeight="464.0" prefWidth="790.0"
                                                           stylesheets="@table.css"/>
-                                        <JFXButton fx:id="updateListingButton" disable="true" layoutX="673.0"
-                                                   layoutY="516.0" onAction="#updateListing" prefHeight="32.0"
-                                                   prefWidth="131.0" styleClass="listings-button"
+                                        <JFXButton fx:id="updateListingButton" buttonType="RAISED" disable="true"
+                                                   layoutX="661.0" layoutY="500.0" onAction="#updateListing"
+                                                   prefHeight="32.0" prefWidth="131.0" styleClass="listings-button"
                                                    stylesheets="@guicss.css" text="%listings.updatebutton"/>
-                                        <JFXButton fx:id="deleteListingButton" disable="true" layoutX="535.0"
-                                                   layoutY="516.0" onAction="#deleteListing" prefHeight="32.0"
-                                                   prefWidth="131.0" styleClass="listings-button"
+                                        <JFXButton fx:id="deleteListingButton" buttonType="RAISED" disable="true"
+                                                   layoutX="509.0" layoutY="500.0" onAction="#deleteListing"
+                                                   prefHeight="32.0" prefWidth="131.0" styleClass="listings-button"
                                                    stylesheets="@guicss.css" text="%listings.deletebutton"/>
-                                        <JFXButton fx:id="createListingButton" layoutX="14.0" layoutY="516.0"
-                                                   onAction="#createListing" prefHeight="32.0" prefWidth="158.0"
-                                                   styleClass="listings-button" stylesheets="@guicss.css"
-                                                   text="%listings.addbutton"/>
+                                        <JFXButton fx:id="createListingButton" buttonType="RAISED" layoutX="13.0"
+                                                   layoutY="500.0" onAction="#createListing" prefHeight="32.0"
+                                                   prefWidth="158.0" styleClass="listings-button"
+                                                   stylesheets="@guicss.css" text="%listings.addbutton"/>
                                     </children>
                                 </AnchorPane>
                             </children>

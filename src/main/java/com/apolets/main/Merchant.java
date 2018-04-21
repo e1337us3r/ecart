@@ -1,52 +1,30 @@
 package com.apolets.main;
 
 public class Merchant {
-    private int id;
-    private String companyName;
-    private String address;
-    private int telNum;
-    private int balance;
+    private static String companyName;
+    private static String address;
+    private static String telNum;
 
-    public Merchant(int id, String companyName, String address, int telNum, int balance) {
-        this.id = id;
-        this.companyName = companyName;
-        this.address = address;
-        this.telNum = telNum;
-        this.balance = balance;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public String getCompanyName() {
+    public static String getCompanyName() {
         return companyName;
     }
 
-    public String getAddress() {
+    public static String getAddress() {
         return address;
     }
 
-    public int getTelNum() {
+    public static void setAddress(String address) {
+        Merchant.address = address;
+    }
+
+    public static String getTelNum() {
         return telNum;
     }
 
-    public int getBalance() {
-        return balance;
+    public static void setTelNum(String telNum) {
+        Merchant.telNum = telNum;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setTelNum(int telNum) {
-        this.telNum = telNum;
-    }
-
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
 
 
 }
