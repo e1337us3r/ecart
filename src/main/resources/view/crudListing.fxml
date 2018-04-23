@@ -28,21 +28,22 @@
                 <JFXButton fx:id="createButton" buttonType="RAISED" layoutX="677.0" layoutY="517.0"
                            onAction="#crudListing" styleClass="listings-button" text="%createlisting.createbutton"/>
                 <JFXButton fx:id="chooseButton" buttonType="RAISED" layoutX="518.0" layoutY="403.0"
-                           onAction="#chooseProfileImage" prefHeight="32.0" prefWidth="150.0"
+                           onAction="#chooseProfileImage" prefHeight="32.0" prefWidth="202.0"
                            styleClass="listings-button" text="%createlisting.filebutton">
                     <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="IMAGE"/>
                     </graphic>
                 </JFXButton>
                 <ComboBox fx:id="comboCat" layoutX="518.0" layoutY="351.0" prefWidth="150.0"
-                          promptText="choose category" style="-fx-background-color: #fff;"/>
-                <Label layoutX="337.0" layoutY="19.0" styleClass="white-text" text="Create a Listing"/>
-                <Label layoutX="49.0" layoutY="69.0" styleClass="white-text" text="Name:"/>
-                <Label layoutX="49.0" layoutY="139.0" styleClass="white-text" text="Description:"/>
-                <Label layoutX="521.0" layoutY="102.0" styleClass="white-text" text="Price:"/>
-                <Label layoutX="518.0" layoutY="170.0" styleClass="white-text" text="Cost:"/>
-                <Label layoutX="518.0" layoutY="241.0" styleClass="white-text" text="Stock:"/>
-                <Label layoutX="518.0" layoutY="313.0" styleClass="white-text" text="Category:"/>
+                          promptText="%createlisting.catpromt" style="-fx-background-color: #fff;"/>
+                <Label fx:id="masterLabel" layoutX="337.0" layoutY="19.0" styleClass="white-text"
+                       text="%createlisting.createlabel"/>
+                <Label layoutX="49.0" layoutY="69.0" styleClass="white-text" text="%createlisting.namelabel"/>
+                <Label layoutX="49.0" layoutY="139.0" styleClass="white-text" text="%createlisting.desclabel"/>
+                <Label layoutX="521.0" layoutY="102.0" styleClass="white-text" text="%createlisting.pricelabel"/>
+                <Label layoutX="518.0" layoutY="170.0" styleClass="white-text" text="%createlisting.costlabel"/>
+                <Label layoutX="518.0" layoutY="241.0" styleClass="white-text" text="%createlisting.stocklabel"/>
+                <Label layoutX="518.0" layoutY="313.0" styleClass="white-text" text="%createlisting.catlabel"/>
                 <Label fx:id="lableChosenFile" layoutX="525.0" layoutY="464.0" textFill="#ebebeb"/>
                 <ScrollPane layoutX="49.0" layoutY="465.0" prefHeight="100.0" prefWidth="431.0" vbarPolicy="NEVER">
                     <content>
@@ -50,7 +51,7 @@
                               styleClass="theme4">
                             <children>
                                 <Label alignment="CENTER" prefHeight="100.0" prefWidth="426.0" styleClass="white-text"
-                                       text="Add additional images here (Max. 5)"/>
+                                       text="%createlisting.additionalpromt"/>
                             </children>
                         </HBox>
                     </content>
@@ -75,7 +76,7 @@
                            style="-fx-border-color: #fff;" styleClass="theme4">
                     <children>
                         <Label alignment="CENTER" prefHeight="90.0" prefWidth="86.0" styleClass="white-text"
-                               text="Profile Image" wrapText="true">
+                               text="%createlisting.profilepromt" wrapText="true">
                             <padding>
                                 <Insets left="15.0"/>
                             </padding>

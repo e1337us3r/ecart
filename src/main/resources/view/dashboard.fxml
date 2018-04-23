@@ -46,7 +46,8 @@
                                              wrappingWidth="70.0"/>
                     </graphic>
                 </JFXButton>
-                <JFXButton fx:id="navOrdersButton" prefHeight="60.0" prefWidth="219.0" stylesheets="@guicss.css"
+                <JFXButton onAction="#showOrders" fx:id="navOrdersButton" prefHeight="60.0" prefWidth="219.0"
+                           stylesheets="@guicss.css"
                            text="%dashboard.orders">
                     <styleClass>
                         <String fx:value="theme4"/>

@@ -3,10 +3,7 @@ package com.apolets.Controllers;
 import com.apolets.main.API;
 import com.apolets.main.Listing;
 import com.apolets.main.fxMain;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -15,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,8 +26,10 @@ public class ListingsController implements Initializable {
     public JFXButton deleteListingButton;
     public JFXButton createListingButton;
     public JFXButton updateListingButton;
-    public AnchorPane rootPane;
+    public StackPane rootPane;
+    public JFXTextField searchBar;
     public static TreeItem<Listing> treeRoot = null;
+    private ObservableList<Listing> oblistings;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -37,8 +37,19 @@ public class ListingsController implements Initializable {
 
         setupTable();
 
+        searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            listingsTable.setPredicate(listingTreeItem -> {
+                //System.out.println(listingsTable.);
+                Listing testSubject = listingTreeItem.getValue();
+                return testSubject.getName().contains(newValue)
+                        || testSubject.getDesc().contains(newValue)
+                        || testSubject.getCategory().contains(newValue);
 
-        //GET DATE AND SET IT TO TABLE
+            });
+        });
+
+
+        //GET DATA AND SET IT TO TABLE
         refreshItems();
 
 
@@ -65,14 +76,18 @@ public class ListingsController implements Initializable {
         listingsTable.setShowRoot(false);//DON'T SHOW ROOT EXPLICITLY
 
         //CREATE THE COLUMNS
+        //TODO: use .property for labels
         JFXTreeTableColumn<Listing, String> nameCol = new JFXTreeTableColumn<>("Name");
+        nameCol.setMinWidth(200);
         JFXTreeTableColumn<Listing, String> descCol = new JFXTreeTableColumn<>("Description");
-        descCol.setMaxWidth(100);
+        descCol.setMinWidth(190);
         JFXTreeTableColumn<Listing, Double> priceCol = new JFXTreeTableColumn<>("Price");
         JFXTreeTableColumn<Listing, Double> costCol = new JFXTreeTableColumn<>("Cost");
         JFXTreeTableColumn<Listing, Integer> stockCol = new JFXTreeTableColumn<>("Stock");
         JFXTreeTableColumn<Listing, LocalDate> dateCol = new JFXTreeTableColumn<>("Release Date");
+        dateCol.setMinWidth(50);
         JFXTreeTableColumn<Listing, String> categoryCol = new JFXTreeTableColumn<>("Category");
+        categoryCol.setMinWidth(50);
         JFXTreeTableColumn<Listing, Integer> ratingCol = new JFXTreeTableColumn<>("Rating");
 
         //ADD COLUMNS TO TABLE
@@ -92,8 +107,8 @@ public class ListingsController implements Initializable {
     public void refreshItems() {
         Platform.runLater(() -> {
             if (API.fetchAllListingsRequest()) {
-                ObservableList<Listing> listings = API.fetchAllListingsPayload();
-                treeRoot = new RecursiveTreeItem<>(listings, RecursiveTreeObject::getChildren);
+                oblistings = API.fetchAllListingsPayload();
+                treeRoot = new RecursiveTreeItem<>(oblistings, RecursiveTreeObject::getChildren);
                 listingsTable.setRoot(treeRoot);
             } else
                 System.out.println(API.getError());
@@ -129,7 +144,7 @@ public class ListingsController implements Initializable {
                 if (update) {
                     controller = new UpdateListingController(selectedListingItem.getValue(), listingsTable);
                 } else {
-                    controller = new CreateListingController(listingsTable);
+                    controller = new CreateListingController(listingsTable, oblistings);
                 }
                 controller.setParent(rootPane);
 

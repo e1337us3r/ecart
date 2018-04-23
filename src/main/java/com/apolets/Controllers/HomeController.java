@@ -77,7 +77,7 @@ public class HomeController implements Initializable {
             if (api.getFinanceInfoRequest(timePeriod, status)) {//change status to pending
 
 
-                if (status.equalsIgnoreCase("complete")) {
+                if (status.equalsIgnoreCase("completed")) {
                     profitLabel.setText(String.valueOf(api.calculateTotalFinanceInfo()));
                     drawGraph(api, timePeriod, "Profit");
                 } else if (status.equalsIgnoreCase("refund"))
@@ -97,7 +97,7 @@ public class HomeController implements Initializable {
 
     public void refreshInfosComboBoxListener(ActionEvent e) {
 
-        setFinanceInfo(profitApi, "Complete", timePickerComboBox.getValue().toLowerCase());
+        setFinanceInfo(profitApi, "Completed", timePickerComboBox.getValue().toLowerCase());
         setFinanceInfo(pendingApi, "Waiting for Approval", timePickerComboBox.getValue().toLowerCase());
         setFinanceInfo(refundApi, "Refund", timePickerComboBox.getValue().toLowerCase());
 
@@ -133,7 +133,7 @@ public class HomeController implements Initializable {
             lineData.getData().add(new XYChart.Data<String, Double>(String.valueOf(e.getKey()), (Double) e.getValue()));
         }
 
-
+        profitGraph.getData().clear();
         profitGraph.getData().addAll(lineData);
     }
 

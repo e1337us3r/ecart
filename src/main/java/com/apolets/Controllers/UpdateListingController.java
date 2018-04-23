@@ -2,9 +2,11 @@ package com.apolets.Controllers;
 
 import com.apolets.main.API;
 import com.apolets.main.Listing;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +20,8 @@ public class UpdateListingController extends CRUDListingsController {
     private Listing existingListing = null;
     private ArrayList<String> deletedAdditionalImages = new ArrayList<>(); //these are additionals that already existed and need to be sent separately to server in order to be deleted completely
     private JFXTreeTableView table;
+    public Label masterLabel;
+    public JFXButton createButton;
 
     public UpdateListingController(Listing existingListing, JFXTreeTableView table) {
         this.table = table;
@@ -26,7 +30,9 @@ public class UpdateListingController extends CRUDListingsController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("initialize update = " + existingListing.getAdditionalImages());
+
+        masterLabel.setText(resources.getString("createlisting.updatelabel"));
+        createButton.setText(resources.getString("createlisting.updatebutton"));
         if (existingListing != null) {
             txtName.setText(existingListing.getName());
             txtDesc.setText(existingListing.getDesc());
@@ -39,6 +45,9 @@ public class UpdateListingController extends CRUDListingsController {
                 addToImageBox(existingListing.getAdditionalImages());
             }
             initProfileImage();
+
+            loadCategories();
+            comboCat.getSelectionModel().select(existingListing.getCategory());
 
         }
 
@@ -66,9 +75,9 @@ public class UpdateListingController extends CRUDListingsController {
         if (API.updateListingRequest(temp, additionalImages, deletedAdditionalImages, profileImageURI)) {
             temp = API.getListing();
             existingListing.setAdditionalImages(temp.getAdditionalImages());
-            System.out.println("api return= " + existingListing.getAdditionalImages());
             table.refresh();
-        } else System.out.println(API.getError());
+            displayDialog(false);
+        } else displayDialog(true);
 
 
     }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="575.0" prefWidth="815.0" styleClass="theme5" stylesheets="@guicss.css"
+            xmlns="http://javafx.com/javafx/8.0.141" fx:controller="com.apolets.Controllers.OrdersController">
+    <children>
+        <JFXTreeTableView layoutX="14.0" layoutY="68.0" prefHeight="482.0" prefWidth="785.0"/>
+        <JFXComboBox fx:id="statusCombo" layoutX="55.0" layoutY="28.0" prefHeight="25.0" prefWidth="179.0"
+                     promptText="Status" styleClass="time-picker"/>
+        <JFXButton buttonType="RAISED" layoutX="676.0" layoutY="28.0" onAction="#refreshTable" prefHeight="25.0"
+                   prefWidth="123.0" styleClass="listings-button" stylesheets="@guicss.css" text="Refresh"/>
+        <JFXDatePicker fx:id="startDatePicker" layoutX="270.0" layoutY="32.0" promptText="Start Date"/>
+        <JFXDatePicker fx:id="endDatePicker" layoutX="471.0" layoutY="32.0" promptText="End Date"/>
+    </children>
+</AnchorPane>

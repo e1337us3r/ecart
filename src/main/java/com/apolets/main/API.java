@@ -42,6 +42,9 @@ public class API {
         return String.valueOf(lastResponse.get("message"));
     }
 
+    public static Listing getListing() {
+        return new Listing(lastResponse.getJSONObject("message"));
+    }
 
     public static ObservableList<Listing> fetchAllListingsPayload() {
 
@@ -55,6 +58,18 @@ public class API {
         return itemsList;
     }
 
+    public static ObservableList<Order> fetchOrdersPayload() {
+
+        ObservableList<Order> itemsList = FXCollections.observableArrayList();
+        if (lastResponse.keySet().contains("items")) {
+            JSONArray items = (JSONArray) lastResponse.get("items"); //json 'items' is array of objects
+            for (int i = 0; i < items.length(); i++) {
+                itemsList.add(new Order(items.getJSONObject(i)));
+            }
+        }
+        return itemsList;
+
+    }
 
     public static boolean loginRequest(String email, String password) {
 
@@ -83,7 +98,7 @@ public class API {
 
     public static boolean fetchAllListingsRequest() {
 
-        String url = SITEURL + "api/fetch_item.php";
+        String url = SITEURL + "api/fetch_all_listings.php";
 
         try {
             HttpResponse<JsonNode> jsonResponse = Unirest.get(url)
@@ -107,7 +122,7 @@ public class API {
     public static boolean deleteListingRequest(int item_id) {
 
 
-        String url = SITEURL + "api/delete_item.php";
+        String url = SITEURL + "api/delete_listing.php";
         try {
             HttpResponse<JsonNode> jsonResponse = Unirest.post(url)
                     .header("Content-Type", "application/x-www-form-urlencoded")
@@ -129,7 +144,7 @@ public class API {
 
 
     public static boolean createListingRequest(String listing_name, Double listing_price, String listing_description, int listing_stock, String listing_category, Double listing_cost, List<File> listing_pics) {
-        String url = SITEURL + "api/create_item.php";
+        String url = SITEURL + "api/create_listing.php";
         try {
             MultipartBody mb = Unirest.post(url)
                     .header("accept", "application/json")
@@ -159,13 +174,34 @@ public class API {
         return false;
     }
 
-    public static Listing getListing() {
-        return new Listing(lastResponse.getJSONObject("message"));
+    public static boolean fetchOrdersRequest(String status, String startDate, String endDate) {
+        String url = SITEURL + "api/fetch_orders.php";
+
+        try {
+            HttpResponse<JsonNode> jsonResponse = Unirest.get(url)
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .queryString("status", status)
+                    .queryString("startDate", startDate)
+                    .queryString("endDate", endDate)
+                    .asJson();
+            lastResponse = jsonResponse.getBody().getObject(); //Get json body
+            if (!hasError()) {
+                return true;
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            lastResponse.put("error", "Request timed-out or failed.");
+        }
+
+        return false;
+
     }
 
 
     public static boolean updateListingRequest(Listing listing, ArrayList<File> additionalImages, ArrayList<String> deletedImages, String profileImage) {
-        String url = SITEURL + "api/update_item.php";
+        String url = SITEURL + "api/update_listing.php";
         try {
             MultipartBody preparedRequest = Unirest.post(url)
                     .header("accept", "application/json")
@@ -197,6 +233,37 @@ public class API {
         return false;
     }
 
+    public static ArrayList<String> fetchCategories() {
+        JSONArray jsoncatArray = lastResponse.getJSONArray("categories");
+        ArrayList<String> categories = new ArrayList<>();
+
+        for (int i = 0; i < jsoncatArray.length(); i++) {
+            categories.add(jsoncatArray.getString(i));
+        }
+        return categories;
+
+    }
+
+    public static boolean fetchCategoriesRequest() {
+        String url = SITEURL + "api/fetch_categories.php";
+
+        try {
+            HttpResponse<JsonNode> jsonResponse = Unirest.get(url)
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .asJson();
+            lastResponse = jsonResponse.getBody().getObject();
+            if (!hasError()) {
+                return true;
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            lastResponse.put("error", "Request timed-out or failed.");
+        }
+
+        return false;
+    }
     //these methods are not static because they will be used with multiple threads and that would cause problems in future
     public double calculateTotalFinanceInfo() {
         Double total = 0.0;

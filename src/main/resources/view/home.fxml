@@ -52,7 +52,7 @@
         </AnchorPane>
         <JFXComboBox fx:id="timePickerComboBox" focusColor="WHITE" layoutX="671.0" layoutY="14.0"
                      onAction="#refreshInfosComboBoxListener" prefHeight="25.0" prefWidth="107.0" promptText="Week"
-                     styleClass="time-picker" stylesheets="@guicss.css" unFocusColor="WHITE" visibleRowCount="4"/>
+                     stylesheets="@guicss.css" unFocusColor="WHITE" visibleRowCount="4"/>
         <AnchorPane fx:id="pendingPane" layoutX="307.0" layoutY="307.0" onMouseClicked="#changeGraphClickListener"
                     prefHeight="200.0" prefWidth="200.0" stylesheets="@guicss.css">
             <children>

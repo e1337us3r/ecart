@@ -1,6 +1,11 @@
 package com.apolets.Controllers;
 
+import com.apolets.main.API;
+import com.apolets.main.Listing;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -10,6 +15,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -34,6 +40,8 @@ public abstract class CRUDListingsController implements Initializable {
     public StackPane profileImagePane;
     public JFXButton addAdditionalButton;
     public JFXButton deleteAdditionalButton;
+    public StackPane stackPane;
+    protected ObservableList<Listing> oblistings;
 
 
     protected Node parent = null;
@@ -46,19 +54,54 @@ public abstract class CRUDListingsController implements Initializable {
     protected Node selectednode;
     protected String selectedUri;
 
+
+    protected void loadCategories() {
+
+        if (API.fetchCategoriesRequest()) {
+            comboCat.getItems().addAll(API.fetchCategories());
+            comboCat.getSelectionModel().select(0);
+        }
+    }
+
+
+    protected void displayDialog(boolean error) {
+
+
+        JFXDialogLayout dialogLayout = new JFXDialogLayout();
+        JFXDialog dialogBox = new JFXDialog(stackPane, dialogLayout, JFXDialog.DialogTransition.CENTER, true);
+
+        if (error) {
+            dialogLayout.setHeading(new Text("Oh no! Something went wrong."));
+            dialogLayout.setBody(new Text(API.getError()));
+        } else {
+            dialogLayout.setHeading(new Text("Operation successful!"));
+        }
+
+        JFXButton closeButton = new JFXButton("Close");
+        closeButton.setOnAction(event -> {
+            dialogBox.close();
+        });
+        dialogLayout.setActions(closeButton);
+
+        dialogBox.show();
+
+    }
+
+
     public void setParent(Node node) {
         parent = node;
     }
 
     public void goBack() {
         //TODO: reverse this so that listings controller deletes its child
-        ListingsController.mainParent.getChildren().clear();
-        ListingsController.mainParent.getChildren().add(parent);
+        DashboardController.mainParentNode.getChildren().clear();
+        DashboardController.mainParentNode.getChildren().add(parent);
     }
 
 
     protected HashMap<String, Object> getInput() {
 
+        //TODO: Verify and Validate
         HashMap<String, Object> inputs = new HashMap<>();
 
         inputs.put("name", txtName.getText());
@@ -66,7 +109,13 @@ public abstract class CRUDListingsController implements Initializable {
         inputs.put("cost", Double.valueOf(txtCost.getText()));
         inputs.put("price", Double.valueOf(txtPrice.getText()));
         inputs.put("stock", Integer.parseInt(txtStock.getText()));
-        inputs.put("category", "category 1");//comboCategories.getValue();
+
+        try {
+            inputs.put("category", comboCat.getValue());
+        } catch (NullPointerException e) {
+            inputs.put("category", "category 1");
+        }
+
 
         return inputs;
     }

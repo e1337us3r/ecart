@@ -20,24 +20,21 @@ public class DashboardController implements Initializable {
     public JFXButton navListingsButton;
     public JFXButton navOrdersButton;
     public JFXButton navAccountButton;
+    public static AnchorPane mainParentNode;
     public AnchorPane mainParent;
-
     private Node home = null;
     private Node listings = null;
+    private Node orders = null;
 
     private void changeView(Node node) {
 
-        Platform.runLater(() -> {
-
-            mainParent.getChildren().clear();
-            mainParent.getChildren().add(node);
-        });
-
+        mainParentNode.getChildren().clear();
+        mainParentNode.getChildren().add(node);
     }
 
 
     public void initialize(URL location, ResourceBundle resources) {
-
+        mainParentNode = mainParent;
         Platform.runLater(() -> {
             try {
                 home = FXMLLoader.load(getClass().getResource("/view/home.fxml"), fxMain.languageBundle);
@@ -52,6 +49,19 @@ public class DashboardController implements Initializable {
 
     public void showHome() {
         changeView(home);
+    }
+
+    public void showOrders() {
+        if (orders == null) {
+            try {
+                orders = FXMLLoader.load(getClass().getResource("/view/orders.fxml"), fxMain.languageBundle);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        changeView(orders);
+
+
     }
 
     public void showListings() {

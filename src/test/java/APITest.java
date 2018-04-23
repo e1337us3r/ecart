@@ -24,7 +24,7 @@ class APITest {
 
     @Test
     void loginRequest() {
-        String[] emails = {"thesakox@gmail.com", "fake@gmail.com", "testmember@gmail.com", "thesakox@gmail.com"};
+        String[] emails = {"testmerchant@gmail.com", "fake@gmail.com", "testmember@gmail.com", "testmerchant@gmail.com"};
         String[] passwords = {"wrong password", "123123", "123123", "123123"};
 
         Boolean[] expectedResults = {false, false, false, true};
@@ -41,7 +41,7 @@ class APITest {
     //AND IF THE FUNCTION RETURNS TRUE OR FALSE
     @Test
     void createListingRequest() {
-        API.loginRequest("thesakox@gmail.com", "123123");
+        API.loginRequest("testmerchant@gmail.com", "123123");
         assertTrue(API.createListingRequest("test listing", 10.0, "test desc", 10, "category 1", 122.0, image));
         assertFalse(API.createListingRequest("test listing", 10.0, "test desc", 10, "cat", 122.0, image));
         assertFalse(API.createListingRequest("te", 10.0, "test desc", 10, "category 1", 122.0, image));
@@ -51,11 +51,11 @@ class APITest {
     @Test
     void fetchAllListingsRequest() {
 
-        API.loginRequest("thesakox@gmail.com", "12312");
+        API.loginRequest("testmerchant@gmail.com", "12312");
 
         assertFalse(API.fetchAllListingsRequest());
 
-        API.loginRequest("thesakox@gmail.com", "123123");
+        API.loginRequest("testmerchant@gmail.com", "123123");
 
         assertTrue(API.fetchAllListingsRequest());
 
@@ -65,7 +65,7 @@ class APITest {
     @Test
     void deleteListingRequest() {
 
-        API.loginRequest("thesakox@gmail.com", "123123");
+        API.loginRequest("testmerchant@gmail.com", "123123");
 
         API.createListingRequest("test listing", 10.0, "test desc", 10, "category 1", 122.0, image);
 
@@ -78,7 +78,7 @@ class APITest {
     @Test
     void updateListingRequest() {
 
-        API.loginRequest("thesakox@gmail.com", "123123");
+        API.loginRequest("testmerchant@gmail.com", "123123");
 
         Listing newListing = new Listing(3, "test listing", 10.0, 5, "test desc", 5, LocalDate.now(), 0, "category 1", "http://testurl.com");
 
@@ -97,7 +97,7 @@ class APITest {
     @Test
     void fetchAllListingsPayload() {
 
-        API.loginRequest("thesakox@gmail.com", "123123");
+        API.loginRequest("testmerchant@gmail.com", "123123");
         API.createListingRequest("test listing", 10.0, "test desc", 10, "category 1", 122.0, image);
         API.createListingRequest("test listing", 10.0, "test desc", 10, "category 1", 122.0, image);
         API.fetchAllListingsRequest();
@@ -111,7 +111,7 @@ class APITest {
     @Test
     void hasError() {
 
-        assertFalse(API.loginRequest("thesakox@gmail.com", "wrong password")); //Invalid login
+        assertFalse(API.loginRequest("testmerchant@gmail.com", "wrong password")); //Invalid login
 
 
         assertFalse(API.deleteListingRequest(2)); //Unauthorized.
@@ -123,7 +123,7 @@ class APITest {
     @Test
     void getError() {
         String res;
-        API.loginRequest("thesakox@gmail.com", "wrong password"); //Invalid login
+        API.loginRequest("testmerchant@gmail.com", "wrong password"); //Invalid login
         res = API.getError();
         assertEquals("Password is incorrect.", res);
 
@@ -141,11 +141,11 @@ class APITest {
     void getMessage() {
 
         String res;
-        API.loginRequest("thesakox@gmail.com", "123123");
+        API.loginRequest("testmerchant@gmail.com", "123123");
         res = API.getMessage();
         assertEquals("Auth successful.", res);
 
-        API.loginRequest("thesakox@gmail.com", "123123");
+        API.loginRequest("testmerchant@gmail.com", "123123");
         res = API.getMessage();
         assertEquals("Already Logged In.", res);
 
