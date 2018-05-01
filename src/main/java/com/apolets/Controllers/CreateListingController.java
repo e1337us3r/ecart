@@ -34,28 +34,28 @@ public class CreateListingController extends CRUDListingsController {
         deleteAdditionalButton.setDisable(true);
         loadCategories();
         fileChooserSetup();
+        setupValidators();
 
     }
 
     public void crudListing() {
 
-        //TODO: add validation
-        HashMap<String, Object> inputs = getInput();
-        try {
-            //required step due to server api
-            //will change this soon once server code gets updated
-            additionalImages.add(0, new File(new URI(profileImageURI)));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+        if (validateInputs()) {
+            HashMap<String, Object> inputs = getInput();
+            try {
+                //required step due to server api, and my laziness to change it
+                additionalImages.add(0, new File(new URI(profileImageURI)));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            boolean result = API.createListingRequest((String) inputs.get("name"), (Double) inputs.get("price"), (String) inputs.get("description"), (Integer) inputs.get("stock"), (String) inputs.get("category"), (Double) inputs.get("cost"), additionalImages);
+
+            if (result) {
+                System.out.println("Success");
+                oblistings.add(API.getListing());
+                displayDialog(false);
+            } else displayDialog(true);
         }
-        boolean result = API.createListingRequest((String) inputs.get("name"), (Double) inputs.get("price"), (String) inputs.get("description"), (Integer) inputs.get("stock"), (String) inputs.get("category"), (Double) inputs.get("cost"), additionalImages);
-
-        if (result) {
-            System.out.println("Success");
-            oblistings.add(API.getListing());
-            displayDialog(false);
-        } else displayDialog(true);
-
 
     }
 

@@ -3,6 +3,7 @@ package com.apolets.Controllers;
 import com.apolets.main.API;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -72,24 +73,42 @@ public class HomeController implements Initializable {
 
     private void setFinanceInfo(API api, String status, String timePeriod) {
 
-        Platform.runLater(() -> {
+        new Thread(new Task<Object>() {
+            @Override
+            protected Object call() {
+                if (api.getFinanceInfoRequest(timePeriod, status)) {//change status to pending
 
-            if (api.getFinanceInfoRequest(timePeriod, status)) {//change status to pending
+
+                    if (status.equalsIgnoreCase("completed")) {
+
+                        Platform.runLater(() -> {
+                            profitLabel.setText(String.valueOf(api.calculateTotalFinanceInfo()));
+                            drawGraph(api, timePeriod, "Profit");
+                        });
 
 
-                if (status.equalsIgnoreCase("completed")) {
-                    profitLabel.setText(String.valueOf(api.calculateTotalFinanceInfo()));
-                    drawGraph(api, timePeriod, "Profit");
-                } else if (status.equalsIgnoreCase("refund"))
-                    refundLabel.setText(String.valueOf(api.calculateTotalFinanceInfo()));
-                else
-                    pendingLabel.setText(String.valueOf(api.calculateTotalFinanceInfo()));
+                    } else if (status.equalsIgnoreCase("refund"))
+                        Platform.runLater(() -> {
+                            refundLabel.setText(String.valueOf(api.calculateTotalFinanceInfo()));
+                        });
 
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR, API.getError(), ButtonType.OK);
-                alert.showAndWait();
+                    else
+                        Platform.runLater(() -> {
+                            pendingLabel.setText(String.valueOf(api.calculateTotalFinanceInfo()));
+                        });
+
+
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, API.getError(), ButtonType.OK);
+                    alert.showAndWait();
+                }
+
+                return null;
             }
-        });
+        }).start();
+
+
+
 
 
     }

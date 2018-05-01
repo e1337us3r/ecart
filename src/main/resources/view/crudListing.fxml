@@ -7,18 +7,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.*?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="stackPane" xmlns="http://javafx.com/javafx/8.0.141">
     <children>
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
                     prefHeight="575.0" prefWidth="815.0" styleClass="theme5" stylesheets="@guicss.css">
             <children>
-                <TextField fx:id="txtName" layoutX="49.0" layoutY="101.0" prefHeight="25.0" prefWidth="431.0"
-                           promptText="name"/>
                 <TextArea fx:id="txtDesc" layoutX="49.0" layoutY="170.0" prefHeight="286.0" prefWidth="431.0"
                           promptText="description" wrapText="true"/>
-                <TextField fx:id="txtPrice" layoutX="518.0" layoutY="139.0" promptText="price"/>
-                <TextField fx:id="txtCost" layoutX="518.0" layoutY="204.0" promptText="cost"/>
-                <TextField fx:id="txtStock" layoutX="518.0" layoutY="275.0" promptText="stock"/>
                 <JFXButton fx:id="backButton" buttonType="RAISED" layoutX="14.0" layoutY="14.0" onAction="#goBack"
                            styleClass="listings-button" text="%createlisting.back">
                     <graphic>
@@ -38,11 +34,11 @@
                           promptText="%createlisting.catpromt" style="-fx-background-color: #fff;"/>
                 <Label fx:id="masterLabel" layoutX="337.0" layoutY="19.0" styleClass="white-text"
                        text="%createlisting.createlabel"/>
-                <Label layoutX="49.0" layoutY="69.0" styleClass="white-text" text="%createlisting.namelabel"/>
+                <Label layoutX="54.0" layoutY="57.0" styleClass="white-text" text="%createlisting.namelabel"/>
                 <Label layoutX="49.0" layoutY="139.0" styleClass="white-text" text="%createlisting.desclabel"/>
-                <Label layoutX="521.0" layoutY="102.0" styleClass="white-text" text="%createlisting.pricelabel"/>
-                <Label layoutX="518.0" layoutY="170.0" styleClass="white-text" text="%createlisting.costlabel"/>
-                <Label layoutX="518.0" layoutY="241.0" styleClass="white-text" text="%createlisting.stocklabel"/>
+                <Label layoutX="518.0" layoutY="57.0" styleClass="white-text" text="%createlisting.pricelabel"/>
+                <Label layoutX="520.0" layoutY="139.0" styleClass="white-text" text="%createlisting.costlabel"/>
+                <Label layoutX="515.0" layoutY="221.0" styleClass="white-text" text="%createlisting.stocklabel"/>
                 <Label layoutX="518.0" layoutY="313.0" styleClass="white-text" text="%createlisting.catlabel"/>
                 <Label fx:id="lableChosenFile" layoutX="525.0" layoutY="464.0" textFill="#ebebeb"/>
                 <ScrollPane layoutX="49.0" layoutY="465.0" prefHeight="100.0" prefWidth="431.0" vbarPolicy="NEVER">
@@ -50,8 +46,8 @@
                         <HBox fx:id="imageBox" alignment="CENTER_LEFT" prefHeight="105.0" prefWidth="429.0"
                               styleClass="theme4">
                             <children>
-                                <Label alignment="CENTER" prefHeight="100.0" prefWidth="426.0" styleClass="white-text"
-                                       text="%createlisting.additionalpromt"/>
+                                <Label fx:id="labelAdditional" alignment="CENTER" prefHeight="100.0" prefWidth="426.0"
+                                       styleClass="white-text" text="%createlisting.additionalpromt"/>
                             </children>
                         </HBox>
                     </content>
@@ -75,14 +71,52 @@
                 <StackPane fx:id="profileImagePane" layoutX="543.0" layoutY="465.0" prefHeight="100.0" prefWidth="100.0"
                            style="-fx-border-color: #fff;" styleClass="theme4">
                     <children>
-                        <Label alignment="CENTER" prefHeight="90.0" prefWidth="86.0" styleClass="white-text"
-                               text="%createlisting.profilepromt" wrapText="true">
+                        <Label fx:id="labelProfile" alignment="CENTER" prefHeight="90.0" prefWidth="86.0"
+                               styleClass="white-text" text="%createlisting.profilepromt" wrapText="true">
                             <padding>
                                 <Insets left="15.0"/>
                             </padding>
                         </Label>
                     </children>
                 </StackPane>
+                <JFXTextField fx:id="txtName" layoutX="49.0" layoutY="90.0" prefHeight="25.0" prefWidth="431.0"
+                              promptText="name" styleClass="crud-txt"/>
+                <JFXTextField fx:id="txtPrice" layoutX="518.0" layoutY="90.0" promptText="e.g. 12.56"
+                              styleClass="crud-txt"/>
+                <JFXTextField fx:id="txtCost" layoutX="518.0" layoutY="170.0" promptText="e.g. 12.0"
+                              styleClass="crud-txt"/>
+                <JFXTextField fx:id="txtStock" layoutX="518.0" layoutY="253.0" promptText="e.g. 120"
+                              styleClass="crud-txt"/>
+                <Label layoutX="510.0" layoutY="303.0" text="*" textFill="RED">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="508.0" layoutY="209.0" prefHeight="2.0" prefWidth="8.0" text="*" textFill="RED">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="511.0" layoutY="130.0" text="*" textFill="RED">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="511.0" layoutY="44.0" text="*" textFill="RED">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="46.0" layoutY="45.0" text="*" textFill="RED">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="533.0" layoutY="449.0" text="*" textFill="RED">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Label>
             </children>
         </AnchorPane>
     </children>

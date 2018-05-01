@@ -7,6 +7,7 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
@@ -105,14 +106,23 @@ public class ListingsController implements Initializable {
     }
 
     public void refreshItems() {
-        Platform.runLater(() -> {
-            if (API.fetchAllListingsRequest()) {
-                oblistings = API.fetchAllListingsPayload();
-                treeRoot = new RecursiveTreeItem<>(oblistings, RecursiveTreeObject::getChildren);
-                listingsTable.setRoot(treeRoot);
-            } else
-                System.out.println(API.getError());
-        });
+        new Thread(new Task<Object>() {
+            @Override
+            protected Object call() {
+                if (API.fetchAllListingsRequest()) {
+                    oblistings = API.fetchAllListingsPayload();
+                    treeRoot = new RecursiveTreeItem<>(oblistings, RecursiveTreeObject::getChildren);
+                    Platform.runLater(() -> {
+                        listingsTable.setRoot(treeRoot);
+                    });
+                } else
+                    System.out.println(API.getError());
+
+                return null;
+            }
+        }).start();
+
+
     }
 
 

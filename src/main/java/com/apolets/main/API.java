@@ -19,7 +19,7 @@ import java.util.List;
 
 public class API {
 
-    public static final String SITEURL = "http://localhost/shop/";
+    public static final String SITEURL = "http://localhost/shop/"; //online= http://shop.apolets.com/
     private static JSONObject lastResponse = new JSONObject();
     public JSONObject lastResponseDynamic = new JSONObject();
 

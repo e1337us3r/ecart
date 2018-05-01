@@ -9,6 +9,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
@@ -96,15 +97,27 @@ public class OrdersController implements Initializable {
     }
 
     public void refreshTable() {
+        if (validateInputs()) {
+            new Thread(new Task<Object>() {
+                @Override
+                protected Object call() {
+                    if (API.fetchOrdersRequest(statusCombo.getValue(), startDatePicker.getValue().toString(), endDatePicker.getValue().toString())) {
+                        ObservableList<Order> orders = API.fetchOrdersPayload();
+                        TreeItem<Order> treeRoot = new RecursiveTreeItem<>(orders, RecursiveTreeObject::getChildren);
+                        Platform.runLater(() -> {
+                            tableView.setRoot(treeRoot);
+                        });
+                    } else
+                        System.out.println(API.getError());
+                    return null;
+                }
+            }).start();
+        }
+    }
 
-        Platform.runLater(() -> {
-            if (API.fetchOrdersRequest(statusCombo.getValue(), startDatePicker.getValue().toString(), endDatePicker.getValue().toString())) {
-                ObservableList<Order> orders = API.fetchOrdersPayload();
-                TreeItem<Order> treeRoot = new RecursiveTreeItem<>(orders, RecursiveTreeObject::getChildren);
-                tableView.setRoot(treeRoot);
-            } else
-                System.out.println(API.getError());
-        });
+    private boolean validateInputs() {
+
+        return statusCombo.getValue() != null && startDatePicker.getValue() != null && endDatePicker.getValue() != null;
 
 
     }

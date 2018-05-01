@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -47,21 +48,25 @@ public class LoginController implements Initializable {
         boolean emailCheck = jf_email.validate();
         if (passwordCheck && emailCheck) {
 
-            //Standard Thread implementation doesn't work because of JavaFX rules
-            //so Platform.runLater is used instead
-            Platform.runLater(() -> {
-                boolean loginSuccess = API.loginRequest(jf_email.getText(), jf_password.getText());
-                //TODO: Have a little animation between scene switch
-                if (loginSuccess)
-                    fxMain.switchToDashboard();
-                else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, API.getError(), ButtonType.OK);
-                    alert.showAndWait();
+
+            new Thread(new Task<Void>() {
+
+                @Override
+                protected Void call() {
+                    boolean loginSuccess = API.loginRequest(jf_email.getText(), jf_password.getText());
+
+                    Platform.runLater(() -> {
+                        if (loginSuccess) {
+                            fxMain.switchToDashboard();
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR, API.getError(), ButtonType.OK);
+                            alert.showAndWait();
+                        }
+                    });
+
+                    return null;
                 }
-            });
-
-
-            System.out.println("pass");
+            }).start();
 
 
         }
@@ -72,8 +77,7 @@ public class LoginController implements Initializable {
         if (Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 
             try {
-                //TODO: Replace this url with sign up page once it is completed
-                Desktop.getDesktop().browse(new URI("http://www.yahoo.com"));
+                Desktop.getDesktop().browse(new URI("http://www.shop.apolets.com/signup.php"));
             } catch (IOException | URISyntaxException e1) {
                 e1.printStackTrace();
             }

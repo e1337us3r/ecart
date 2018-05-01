@@ -1,5 +1,6 @@
 package com.apolets.InputValidator;
 
+import com.apolets.main.fxMain;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.validation.base.ValidatorBase;
 
@@ -14,7 +15,7 @@ public class PasswordValidator extends ValidatorBase {
 
     public PasswordValidator() {
         pattern = Pattern.compile(PASSWORD_PATTERN);
-        setMessage("Incorrect password format");
+        setMessage(fxMain.languageBundle.getString("validator.password"));
     }
 
     @Override

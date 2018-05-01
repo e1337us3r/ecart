@@ -25,11 +25,6 @@ public class fxMain extends Application {
     public static ResourceBundle languageBundle = ResourceBundle.getBundle("view/lang", new Locale("en", "US"));
     private static Parent dashboardScene = null;
 
-    public static void exitApplication() {
-        window.close();
-
-    }
-
     public static void switchToDashboard() {
         try {
             dashboardScene = FXMLLoader.load(fxMain.class.getResource("/view/dashboard.fxml"), languageBundle);

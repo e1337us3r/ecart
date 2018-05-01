@@ -1,10 +1,14 @@
 package com.apolets.Controllers;
 
+import com.apolets.InputValidator.RequiredValidator;
 import com.apolets.main.API;
 import com.apolets.main.Listing;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.DoubleValidator;
+import com.jfoenix.validation.NumberValidator;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,7 +16,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -21,18 +24,17 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public abstract class CRUDListingsController implements Initializable {
 
-//TODO: replace fields with JFX equivelent so that validators could be used
-//TODO: Verifiy and Validate inputs
 
-    public TextField txtName;
-    public TextField txtPrice;
-    public TextField txtCost;
-    public TextField txtStock;
+    public JFXTextField txtName;
+    public JFXTextField txtPrice;
+    public JFXTextField txtCost;
+    public JFXTextField txtStock;
     public TextArea txtDesc;
     public HBox imageBox;
     public ComboBox<String> comboCat;
@@ -101,7 +103,7 @@ public abstract class CRUDListingsController implements Initializable {
 
     protected HashMap<String, Object> getInput() {
 
-        //TODO: Verify and Validate
+
         HashMap<String, Object> inputs = new HashMap<>();
 
         inputs.put("name", txtName.getText());
@@ -124,7 +126,7 @@ public abstract class CRUDListingsController implements Initializable {
 
 
     protected void fileChooserSetup() {
-        chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JPG", "*.jpg"), new FileChooser.ExtensionFilter("PNG", "*.png"));
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JPG or PNG", Arrays.asList("*.jpg", "**.png")));
         chooser.setTitle("Choose Image(s) for Listing");
     }
 
@@ -197,5 +199,24 @@ public abstract class CRUDListingsController implements Initializable {
 
     public abstract void deleteAdditional();
 
+    protected boolean validateInputs() {
+
+        boolean one = txtName.validate();
+        boolean two = txtPrice.validate();
+        boolean three = txtCost.validate();
+        boolean four = txtStock.validate();
+
+
+        return comboCat.getValue() != null && profileImageURI != null && one && two && three && four;
+
+
+    }
+
+    protected void setupValidators() {
+        txtCost.setValidators(new RequiredValidator(), new DoubleValidator());
+        txtPrice.setValidators(new RequiredValidator(), new DoubleValidator());
+        txtStock.setValidators(new RequiredValidator(), new NumberValidator());
+        txtName.setValidators(new RequiredValidator());
+    }
 
 }

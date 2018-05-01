@@ -1,6 +1,8 @@
 package com.apolets.Controllers;
 
 import com.apolets.main.API;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,8 +22,17 @@ public class ImageContainerController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Image image = new Image((!imageUrl.startsWith("file:")) ? (API.SITEURL + "images/" + imageUrl) : imageUrl);
-        imageView.setImage(image);
+        new Thread(new Task<Object>() {
+            @Override
+            protected Object call() {
+                Image image = new Image((!imageUrl.startsWith("file:")) ? (API.SITEURL + "images/" + imageUrl) : imageUrl);
+                Platform.runLater(() -> {
+                    imageView.setImage(image);
+                });
+                return null;
+            }
+        }).start();
+
     }
 
 

@@ -6,7 +6,7 @@
             minWidth="-Infinity" prefHeight="575.0" prefWidth="815.0" styleClass="theme5" stylesheets="@guicss.css"
             xmlns="http://javafx.com/javafx/8.0.141" fx:controller="com.apolets.Controllers.OrdersController">
     <children>
-        <JFXTreeTableView layoutX="14.0" layoutY="68.0" prefHeight="482.0" prefWidth="785.0"/>
+        <JFXTreeTableView fx:id="tableView" layoutX="14.0" layoutY="68.0" prefHeight="482.0" prefWidth="785.0"/>
         <JFXComboBox fx:id="statusCombo" layoutX="55.0" layoutY="28.0" prefHeight="25.0" prefWidth="179.0"
                      promptText="Status" styleClass="time-picker"/>
         <JFXButton buttonType="RAISED" layoutX="676.0" layoutY="28.0" onAction="#refreshTable" prefHeight="25.0"

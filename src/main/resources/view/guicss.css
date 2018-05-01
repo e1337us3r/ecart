@@ -116,3 +116,8 @@
 .jfx-combo-box {
     -fx-prompt-text-fill: white;
 }
+
+.crud-txt {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-prompt-text-fill: rgb(168, 168, 168);
+}

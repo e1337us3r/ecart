@@ -3,7 +3,6 @@ package com.apolets.Controllers;
 
 import com.apolets.main.fxMain;
 import com.jfoenix.controls.JFXButton;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -35,19 +34,22 @@ public class DashboardController implements Initializable {
 
     public void initialize(URL location, ResourceBundle resources) {
         mainParentNode = mainParent;
-        Platform.runLater(() -> {
-            try {
-                home = FXMLLoader.load(getClass().getResource("/view/home.fxml"), fxMain.languageBundle);
-                changeView(home);
-            } catch (IOException e) {
-                e.printStackTrace();
-                fxMain.exitApplication();
-            }
-        });
+
+
+        showHome();
+
 
     }
 
     public void showHome() {
+        if (home == null) {
+            try {
+                home = FXMLLoader.load(getClass().getResource("/view/home.fxml"), fxMain.languageBundle);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         changeView(home);
     }
 

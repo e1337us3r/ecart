@@ -1,5 +1,6 @@
 package com.apolets.InputValidator;
 
+import com.apolets.main.fxMain;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.base.ValidatorBase;
 
@@ -14,6 +15,7 @@ public class EmailValidator extends ValidatorBase {
 
     public EmailValidator() {
         pattern = Pattern.compile(EMAIL_PATTERN);
+        setMessage(fxMain.languageBundle.getString("validator.email"));
     }
 
     @Override
@@ -22,7 +24,6 @@ public class EmailValidator extends ValidatorBase {
         JFXTextField field = (JFXTextField) srcControl.get();
         if (!validate(field.getText())) {
             hasErrors.set(true);
-            setMessage("Incorrect email format");
             field.getStyleClass().remove(field.getStyleClass().size() - 1);
             field.getStyleClass().add("fieldfail");
             //System.out.println(field.getStyleClass());
