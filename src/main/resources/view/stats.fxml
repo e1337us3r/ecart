@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="575.0" prefWidth="815.0" styleClass="theme5" stylesheets="@guicss.css"
+            xmlns="http://javafx.com/javafx/8.0.141" fx:controller="com.apolets.Controllers.statsController">
+    <children>
+        <Label layoutX="42.0" layoutY="31.0" styleClass="white-text" text="%stats.maintitle"/>
+        <AnchorPane layoutX="33.0" layoutY="153.0" prefHeight="200.0" prefWidth="200.0" styleClass="theme4">
+            <children>
+                <VBox fx:id="topContainer" prefHeight="200.0" prefWidth="205.0" AnchorPane.bottomAnchor="0.0"
+                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+            </children>
+        </AnchorPane>
+        <Label layoutX="34.0" layoutY="104.0" styleClass="white-text" text="%stats.toplistingstitle"/>
+        <AnchorPane layoutX="244.0" layoutY="153.0" prefHeight="286.0" prefWidth="328.0" styleClass="theme4">
+            <children>
+                <PieChart fx:id="pieChart" layoutX="-6.0" layoutY="4.0" prefHeight="286.0" prefWidth="292.0"
+                          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                          AnchorPane.topAnchor="0.0"/>
+            </children>
+        </AnchorPane>
+        <Label layoutX="300.0" layoutY="104.0" styleClass="white-text" text="%stats.topcattitle"/>
+        <AnchorPane layoutX="582.0" layoutY="153.0" prefHeight="200.0" prefWidth="200.0" styleClass="theme4">
+            <children>
+                <ProgressIndicator fx:id="fulfillmentIndicator" layoutX="6.0" layoutY="4.0" prefHeight="200.0"
+                                   prefWidth="200.0" progress="0.0" AnchorPane.bottomAnchor="0.0"
+                                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+            </children>
+        </AnchorPane>
+        <Label layoutX="581.0" layoutY="105.0" styleClass="white-text" text="%stats.fulfilmenttitle"/>
+    </children>
+</AnchorPane>

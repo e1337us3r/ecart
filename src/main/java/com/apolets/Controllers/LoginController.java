@@ -6,6 +6,7 @@ import com.apolets.InputValidator.RequiredValidator;
 import com.apolets.main.API;
 import com.apolets.main.fxMain;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
@@ -30,12 +31,29 @@ public class LoginController implements Initializable {
     public JFXButton jb_login;
     public Hyperlink jlink_forgot;
     public JFXButton jb_signup;
+    public JFXComboBox languageCombo;
 
     public void initialize(URL location, ResourceBundle resources) {
-
-
         jf_email.setValidators(new RequiredValidator(), new EmailValidator());
         jf_password.setValidators(new RequiredValidator(), new PasswordValidator());
+
+        languageCombo.getItems().add("English");
+        languageCombo.getItems().add("Türkçe");
+
+
+        languageCombo.getSelectionModel().select(Integer.parseInt(resources.getString("index")));
+
+        languageCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
+            String selectedlang = (String) newValue;
+            String language = "en";
+            String country = "US";
+            if (selectedlang.equalsIgnoreCase("türkçe")) {
+                language = "tr";
+                country = "TR";
+            }
+            fxMain.changeLanguage(language, country);
+            fxMain.startLogin();
+        });
 
     }
 

@@ -102,7 +102,7 @@ public class OrdersController implements Initializable {
                 @Override
                 protected Object call() {
                     if (API.fetchOrdersRequest(statusCombo.getValue(), startDatePicker.getValue().toString(), endDatePicker.getValue().toString())) {
-                        ObservableList<Order> orders = API.fetchOrdersPayload();
+                        ObservableList<Order> orders = API.getOrdersPayload();
                         TreeItem<Order> treeRoot = new RecursiveTreeItem<>(orders, RecursiveTreeObject::getChildren);
                         Platform.runLater(() -> {
                             tableView.setRoot(treeRoot);

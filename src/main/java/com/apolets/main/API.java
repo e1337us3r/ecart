@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class API {
@@ -46,7 +47,7 @@ public class API {
         return new Listing(lastResponse.getJSONObject("message"));
     }
 
-    public static ObservableList<Listing> fetchAllListingsPayload() {
+    public static ObservableList<Listing> getAllListingsPayload() {
 
         ObservableList<Listing> itemsList = FXCollections.observableArrayList();
         if (lastResponse.keySet().contains("items")) {
@@ -58,7 +59,7 @@ public class API {
         return itemsList;
     }
 
-    public static ObservableList<Order> fetchOrdersPayload() {
+    public static ObservableList<Order> getOrdersPayload() {
 
         ObservableList<Order> itemsList = FXCollections.observableArrayList();
         if (lastResponse.keySet().contains("items")) {
@@ -69,6 +70,37 @@ public class API {
         }
         return itemsList;
 
+    }
+
+    public static String[] getTop5Listings() {
+        String[] listingNames = new String[5];
+
+        JSONArray jsonArray = lastResponse.getJSONArray("toplistings");
+
+        for (int i = 0; i < 5; i++) {
+            listingNames[i] = jsonArray.getString(i);
+        }
+
+        return listingNames;
+
+    }
+
+    public static LinkedHashMap<String, Integer> getTopCategories() {
+
+        LinkedHashMap<String, Integer> cats = new LinkedHashMap<>();
+
+        JSONArray jsonArrayall = lastResponse.getJSONArray("topcats");
+
+        for (int i = 0; i < jsonArrayall.length(); i++) {
+            JSONArray singleCat = jsonArrayall.getJSONArray(i);
+            cats.put(singleCat.getString(0), singleCat.getInt(1));
+        }
+        return cats;
+
+    }
+
+    public static double getFulfillmentRate() {
+        return lastResponse.getDouble("fullfillment");
     }
 
     public static boolean loginRequest(String email, String password) {
@@ -142,6 +174,27 @@ public class API {
 
     }
 
+    public static boolean getStatsRequest() {
+        String url = SITEURL + "api/get_stats.php";
+
+        try {
+            HttpResponse<JsonNode> jsonResponse = Unirest.get(url)
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .asJson();
+            lastResponse = jsonResponse.getBody().getObject();
+            if (!hasError()) {
+                return true;
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            lastResponse.put("error", "Request timed-out or failed.");
+        }
+
+        return false;
+
+    }
 
     public static boolean createListingRequest(String listing_name, Double listing_price, String listing_description, int listing_stock, String listing_category, Double listing_cost, List<File> listing_pics) {
         String url = SITEURL + "api/create_listing.php";

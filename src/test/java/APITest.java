@@ -102,7 +102,7 @@ class APITest {
         API.createListingRequest("test listing", 10.0, "test desc", 10, "category 1", 122.0, image);
         API.fetchAllListingsRequest();
 
-        ObservableList<Listing> listins = API.fetchAllListingsPayload();
+        ObservableList<Listing> listins = API.getAllListingsPayload();
 
         assertTrue(listins.size() > 0);
 

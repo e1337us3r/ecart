@@ -110,7 +110,7 @@ public class ListingsController implements Initializable {
             @Override
             protected Object call() {
                 if (API.fetchAllListingsRequest()) {
-                    oblistings = API.fetchAllListingsPayload();
+                    oblistings = API.getAllListingsPayload();
                     treeRoot = new RecursiveTreeItem<>(oblistings, RecursiveTreeObject::getChildren);
                     Platform.runLater(() -> {
                         listingsTable.setRoot(treeRoot);

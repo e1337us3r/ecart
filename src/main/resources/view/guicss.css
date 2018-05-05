@@ -121,3 +121,11 @@
     -fx-background-color: rgb(255, 255, 255);
     -fx-prompt-text-fill: rgb(168, 168, 168);
 }
+
+.progress-indicator:determinate .determinate-indicator .progress {
+    -fx-background-color: #1c64c2;
+}
+
+.progress-indicator:determinate .determinate-indicator .percentage {
+    -fx-fill: white;
+}

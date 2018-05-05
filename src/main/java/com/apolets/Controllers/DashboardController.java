@@ -24,6 +24,7 @@ public class DashboardController implements Initializable {
     private Node home = null;
     private Node listings = null;
     private Node orders = null;
+    private Node stats = null;
 
     private void changeView(Node node) {
 
@@ -39,6 +40,18 @@ public class DashboardController implements Initializable {
         showHome();
 
 
+    }
+
+    public void showStats() {
+        if (stats == null) {
+            try {
+                stats = FXMLLoader.load(getClass().getResource("/view/stats.fxml"), fxMain.languageBundle);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        changeView(stats);
     }
 
     public void showHome() {

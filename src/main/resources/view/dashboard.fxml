@@ -34,9 +34,8 @@
                         <String fx:value="dashboard-button"/>
                     </styleClass>
                 </JFXButton>
-                <JFXButton onAction="#showListings" fx:id="navListingsButton" prefHeight="60.0" prefWidth="219.0"
-                           stylesheets="@guicss.css"
-                           text="%dashboard.listings">
+                <JFXButton fx:id="navListingsButton" onAction="#showListings" prefHeight="60.0" prefWidth="219.0"
+                           stylesheets="@guicss.css" text="%dashboard.listings">
                     <styleClass>
                         <String fx:value="theme4"/>
                         <String fx:value="dashboard-button"/>
@@ -46,9 +45,8 @@
                                              wrappingWidth="70.0"/>
                     </graphic>
                 </JFXButton>
-                <JFXButton onAction="#showOrders" fx:id="navOrdersButton" prefHeight="60.0" prefWidth="219.0"
-                           stylesheets="@guicss.css"
-                           text="%dashboard.orders">
+                <JFXButton fx:id="navOrdersButton" onAction="#showOrders" prefHeight="60.0" prefWidth="219.0"
+                           stylesheets="@guicss.css" text="%dashboard.orders">
                     <styleClass>
                         <String fx:value="theme4"/>
                         <String fx:value="dashboard-button"/>
@@ -58,14 +56,14 @@
                                              wrappingWidth="81.7857141494751"/>
                     </graphic>
                 </JFXButton>
-                <JFXButton fx:id="navAccountButton" prefHeight="60.0" prefWidth="219.0" stylesheets="@guicss.css"
-                           text="%dashboard.account">
+                <JFXButton fx:id="navAccountButton" onAction="#showStats" prefHeight="60.0" prefWidth="219.0"
+                           stylesheets="@guicss.css" text="%dashboard.account">
                     <styleClass>
                         <String fx:value="theme4"/>
                         <String fx:value="dashboard-button"/>
                     </styleClass>
                     <graphic>
-                        <FontAwesomeIconView fill="#a1aec4" glyphName="USER" size="20"
+                        <FontAwesomeIconView fill="#a1aec4" glyphName="SIGNAL" size="20"
                                              wrappingWidth="69.7857141494751"/>
                     </graphic>
                 </JFXButton>

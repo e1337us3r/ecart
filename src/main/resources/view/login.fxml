@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXPasswordField?>
-<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="498.0" prefWidth="970.0" styleClass="theme5" stylesheets="@guicss.css"
             xmlns="http://javafx.com/javafx/8.0.141" fx:controller="com.apolets.Controllers.LoginController">
@@ -42,8 +40,8 @@
                 <DropShadow/>
             </effect>
         </Label>
-        <Label layoutX="514.0" layoutY="160.0" prefHeight="86.0" prefWidth="401.0"
-               text="Join thousand of merchants today and take your businness online." textFill="WHITE" wrapText="true">
+        <Label layoutX="514.0" layoutY="160.0" prefHeight="86.0" prefWidth="401.0" text="%login.slogansubtext"
+               textFill="WHITE" wrapText="true">
             <font>
                 <Font name="Calibri" size="23.0"/>
             </font>
@@ -66,6 +64,12 @@
             <effect>
                 <DropShadow radius="4.81" width="0.24"/>
             </effect>
+        </Label>
+        <JFXComboBox fx:id="languageCombo" layoutX="331.0" layoutY="460.0" prefHeight="25.0" prefWidth="99.0"/>
+        <Label layoutX="238.0" layoutY="461.0" text="%login.language" textFill="WHITE">
+            <font>
+                <Font name="Calibri" size="18.0"/>
+            </font>
         </Label>
     </children>
 </AnchorPane>

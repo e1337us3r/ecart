@@ -22,12 +22,29 @@ public class fxMain extends Application {
         launch(args);
     }
 
-    public static ResourceBundle languageBundle = ResourceBundle.getBundle("view/lang", new Locale("en", "US"));
-    private static Parent dashboardScene = null;
+    public static ResourceBundle languageBundle;
+
+    public static void startLogin() {
+        try {
+            Parent loginScene = null;
+            loginScene = FXMLLoader.load(fxMain.class.getResource("/view/login.fxml"), languageBundle);
+            window.setTitle("E-cart.com Merchant Client v.01");
+            window.setScene(new Scene(loginScene));
+            window.setResizable(false);
+            window.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void changeLanguage(String language, String country) {
+        languageBundle = ResourceBundle.getBundle("view/lang", new Locale(language, country));
+    }
 
     public static void switchToDashboard() {
         try {
-            dashboardScene = FXMLLoader.load(fxMain.class.getResource("/view/dashboard.fxml"), languageBundle);
+            Parent dashboardScene = FXMLLoader.load(fxMain.class.getResource("/view/dashboard.fxml"), languageBundle);
             window.setTitle("E-cart.com Merchant Client v.01");
             window.setScene(new Scene(dashboardScene));
             window.setResizable(false);
@@ -40,22 +57,13 @@ public class fxMain extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Parent loginScene = null;
+
         window = primaryStage;
+        changeLanguage("en", "US");
+        startLogin();
 
-        try {
-
-            loginScene = FXMLLoader.load(getClass().getResource("/view/login.fxml"), languageBundle);
-            window.setTitle("E-cart.com Merchant Client v.01");
-            window.setScene(new Scene(loginScene));
-            window.setResizable(false);
-            window.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
-
     private static void setUp() {
 
 
