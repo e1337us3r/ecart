@@ -32,6 +32,8 @@ public class fxMain extends Application {
             window.setScene(new Scene(loginScene));
             window.setResizable(false);
             window.show();
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }

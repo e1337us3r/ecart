@@ -1,7 +1,7 @@
 package com.apolets.Controllers;
 
+import com.apolets.API.CategoriesRequest;
 import com.apolets.InputValidator.RequiredValidator;
-import com.apolets.main.API;
 import com.apolets.main.Listing;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.DoubleValidator;
 import com.jfoenix.validation.NumberValidator;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,26 +45,40 @@ public abstract class CRUDListingsController implements Initializable {
     public JFXButton addAdditionalButton;
     public JFXButton deleteAdditionalButton;
     public StackPane stackPane;
-    protected ObservableList<Listing> oblistings;
+    protected ObservableList<Listing> oblistings; //this is used to update table content with new listing
 
 
-    protected Node parent = null;
+    protected Node parent = null; //required for going back to previous scene
 
     protected String profileImageURI;
     protected ArrayList<File> additionalImages = new ArrayList<>();
     protected FileChooser chooser = new FileChooser();
-    protected int imageCount = 0;
+    protected int imageCount = 0; //required to keep count of additional images, max.5
 
-    protected Node selectednode;
-    protected String selectedUri;
+    protected Node selectednode; //selected additional image node
+    protected String selectedUri; //selected additional image uri
 
 
     protected void loadCategories() {
 
-        if (API.fetchCategoriesRequest()) {
-            comboCat.getItems().addAll(API.fetchCategories());
-            comboCat.getSelectionModel().select(0);
-        }
+        new CategoriesRequest() {
+            @Override
+            protected void success(JSONObject response) {
+                Platform.runLater(() -> {
+                    comboCat.getItems().addAll(getCategories(response));
+                    comboCat.getSelectionModel().select(0);
+                });
+
+            }
+
+            @Override
+            protected void fail(String error) {
+                //TODO: display error?
+                System.out.println("CategoriesRequest : " + error);
+            }
+        };
+
+
     }
 
 
@@ -74,7 +90,7 @@ public abstract class CRUDListingsController implements Initializable {
 
         if (error) {
             dialogLayout.setHeading(new Text("Oh no! Something went wrong."));
-            dialogLayout.setBody(new Text(API.getError()));
+            dialogLayout.setBody(new Text("Please check your internet connection."));
         } else {
             dialogLayout.setHeading(new Text("Operation successful!"));
         }

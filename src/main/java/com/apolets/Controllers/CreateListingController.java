@@ -1,10 +1,12 @@
 package com.apolets.Controllers;
 
-import com.apolets.main.API;
+import com.apolets.API.CreateListingRequest;
 import com.apolets.main.Listing;
 import com.jfoenix.controls.JFXTreeTableView;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.net.URI;
@@ -48,15 +50,22 @@ public class CreateListingController extends CRUDListingsController {
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-            boolean result = API.createListingRequest((String) inputs.get("name"), (Double) inputs.get("price"), (String) inputs.get("description"), (Integer) inputs.get("stock"), (String) inputs.get("category"), (Double) inputs.get("cost"), additionalImages);
 
-            if (result) {
-                System.out.println("Success");
-                oblistings.add(API.getListing());
-                displayDialog(false);
-            } else displayDialog(true);
+
+            new CreateListingRequest((String) inputs.get("name"), (Double) inputs.get("price"), (String) inputs.get("description"), (Integer) inputs.get("stock"), (String) inputs.get("category"), (Double) inputs.get("cost"), additionalImages) {
+                @Override
+                protected void success(JSONObject response) {
+                    oblistings.add(this.getListing(response));
+                    Platform.runLater(() -> displayDialog(false));
+
+                }
+
+                @Override
+                protected void fail(String error) {
+                    Platform.runLater(() -> displayDialog(true));
+                }
+            };
         }
-
     }
 
     @Override
@@ -68,7 +77,7 @@ public class CreateListingController extends CRUDListingsController {
             selectednode = null;
             addAdditionalButton.setDisable(false);
             deleteAdditionalButton.setDisable(true);
-            imageCount--;
+            imageCount--; //required to allow only 5 additional images
         }
     }
 

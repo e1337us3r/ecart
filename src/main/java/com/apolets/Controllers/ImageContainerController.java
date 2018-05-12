@@ -1,6 +1,6 @@
 package com.apolets.Controllers;
 
-import com.apolets.main.API;
+import com.apolets.API.Request;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
@@ -25,7 +25,7 @@ public class ImageContainerController implements Initializable {
         new Thread(new Task<Object>() {
             @Override
             protected Object call() {
-                Image image = new Image((!imageUrl.startsWith("file:")) ? (API.SITEURL + "images/" + imageUrl) : imageUrl);
+                Image image = new Image((!imageUrl.startsWith("file:")) ? (Request.DOMAIN + "images/" + imageUrl) : imageUrl);
                 Platform.runLater(() -> {
                     imageView.setImage(image);
                 });

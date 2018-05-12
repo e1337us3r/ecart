@@ -1,19 +1,20 @@
 package com.apolets.Controllers;
 
-import com.apolets.main.API;
+import com.apolets.API.DeleteListingRequest;
+import com.apolets.API.FetchAllListingsRequest;
 import com.apolets.main.Listing;
 import com.apolets.main.fxMain;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -38,6 +39,7 @@ public class ListingsController implements Initializable {
 
         setupTable();
 
+        //SETUP SEARCH BAR, IT SEARCHES NAME DESCRIPTION AND CATEGORY OF ALL LISTINGS
         searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             listingsTable.setPredicate(listingTreeItem -> {
                 //System.out.println(listingsTable.);
@@ -106,23 +108,21 @@ public class ListingsController implements Initializable {
     }
 
     public void refreshItems() {
-        new Thread(new Task<Object>() {
+        new FetchAllListingsRequest() {
             @Override
-            protected Object call() {
-                if (API.fetchAllListingsRequest()) {
-                    oblistings = API.getAllListingsPayload();
-                    treeRoot = new RecursiveTreeItem<>(oblistings, RecursiveTreeObject::getChildren);
-                    Platform.runLater(() -> {
-                        listingsTable.setRoot(treeRoot);
-                    });
-                } else
-                    System.out.println(API.getError());
-
-                return null;
+            protected void success(JSONObject response) {
+                oblistings = this.getAllListingsPayload(response);
+                treeRoot = new RecursiveTreeItem<>(oblistings, RecursiveTreeObject::getChildren);
+                Platform.runLater(() -> {
+                    listingsTable.setRoot(treeRoot);
+                });
             }
-        }).start();
 
-
+            @Override
+            protected void fail(String error) {
+                System.out.println("FetchAllListingsRequest : " + error);
+            }
+        };
     }
 
 
@@ -132,10 +132,19 @@ public class ListingsController implements Initializable {
 
     public void deleteListing() {
 
-        boolean result = API.deleteListingRequest(selectedListingItem.getValue().getId());
-        if (result) {
-            selectedListingItem.getParent().getChildren().remove(selectedListingItem); //remove the selected node from it's parent's children.
-        } else System.out.println(API.getError());
+        new DeleteListingRequest(selectedListingItem.getValue().getId()) {
+            @Override
+            protected void success(JSONObject response) {
+                selectedListingItem.getParent().getChildren().remove(selectedListingItem); //remove the selected node from it's parent's children.
+            }
+
+            @Override
+            protected void fail(String error) {
+                System.out.println("deleteListing : " + error);
+            }
+        };
+
+
 
     }
 

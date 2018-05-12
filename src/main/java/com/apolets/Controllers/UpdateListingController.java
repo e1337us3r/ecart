@@ -1,12 +1,14 @@
 package com.apolets.Controllers;
 
-import com.apolets.main.API;
+import com.apolets.API.UpdateListingRequest;
 import com.apolets.main.Listing;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +33,11 @@ public class UpdateListingController extends CRUDListingsController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        //Recycle Create Listing View
         masterLabel.setText(resources.getString("createlisting.updatelabel"));
         createButton.setText(resources.getString("createlisting.updatebutton"));
+
+
         if (existingListing != null) {
             txtName.setText(existingListing.getName());
             txtDesc.setText(existingListing.getDesc());
@@ -53,6 +58,7 @@ public class UpdateListingController extends CRUDListingsController {
 
         deleteAdditionalButton.setDisable(true);
         fileChooserSetup();
+        System.out.println(existingListing);
 
     }
 
@@ -72,12 +78,32 @@ public class UpdateListingController extends CRUDListingsController {
         temp.setStoreImage(profileImageURI);
 
 
-        if (API.updateListingRequest(temp, additionalImages, deletedAdditionalImages, profileImageURI)) {
-            temp = API.getListing();
-            existingListing.setAdditionalImages(temp.getAdditionalImages());
-            table.refresh();
-            displayDialog(false);
-        } else displayDialog(true);
+        new UpdateListingRequest(temp, additionalImages, deletedAdditionalImages, profileImageURI) {
+            @Override
+            protected void success(JSONObject response) {
+                Listing updatedListing = this.getListing(response);
+                existingListing.setName(updatedListing.getName());
+                existingListing.setDesc(updatedListing.getDesc());
+                existingListing.setStock(updatedListing.getStock());
+                existingListing.setCategory(updatedListing.getCategory());
+                existingListing.setCost(updatedListing.getCost());
+                existingListing.setPrice(updatedListing.getPrice());
+                existingListing.setStoreImage(updatedListing.getStoreImage());
+                existingListing.setRating(updatedListing.getRating());
+                existingListing.setAdditionalImages(updatedListing.getAdditionalImages());
+                table.refresh();
+                Platform.runLater(() -> displayDialog(false));
+
+            }
+
+            @Override
+            protected void fail(String error) {
+                Platform.runLater(() -> displayDialog(true));
+            }
+        };
+
+
+
 
 
     }

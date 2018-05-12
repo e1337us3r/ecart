@@ -1,21 +1,21 @@
 package com.apolets.Controllers;
 
+import com.apolets.API.LoginRequest;
 import com.apolets.InputValidator.EmailValidator;
 import com.apolets.InputValidator.PasswordValidator;
 import com.apolets.InputValidator.RequiredValidator;
-import com.apolets.main.API;
 import com.apolets.main.fxMain;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.io.IOException;
@@ -67,24 +67,18 @@ public class LoginController implements Initializable {
         if (passwordCheck && emailCheck) {
 
 
-            new Thread(new Task<Void>() {
+            new LoginRequest(jf_email.getText(), jf_password.getText()) {
+                @Override
+                protected void success(JSONObject response) {
+                    Platform.runLater(fxMain::switchToDashboard);
+                }
 
                 @Override
-                protected Void call() {
-                    boolean loginSuccess = API.loginRequest(jf_email.getText(), jf_password.getText());
-
-                    Platform.runLater(() -> {
-                        if (loginSuccess) {
-                            fxMain.switchToDashboard();
-                        } else {
-                            Alert alert = new Alert(Alert.AlertType.ERROR, API.getError(), ButtonType.OK);
-                            alert.showAndWait();
-                        }
-                    });
-
-                    return null;
+                protected void fail(String error) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, error, ButtonType.OK);
+                    alert.showAndWait();
                 }
-            }).start();
+            };
 
 
         }

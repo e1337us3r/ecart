@@ -196,14 +196,13 @@ public class Listing extends RecursiveTreeObject<Listing> implements Comparable<
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", cost=" + cost +
+                ", desc='" + desc + '\'' +
                 ", stock=" + stock +
                 ", listDate=" + listDate +
                 ", rating=" + rating +
                 ", category='" + category + '\'' +
+                ", storeImage='" + storeImage + '\'' +
+                ", additionalImages=" + additionalImages +
                 '}';
     }
-
-
-
-
 }

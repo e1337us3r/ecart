@@ -1,6 +1,6 @@
 package com.apolets.Controllers;
 
-import com.apolets.main.API;
+import com.apolets.API.FetchOrdersRequest;
 import com.apolets.main.ComboBoxEditorBuilder;
 import com.apolets.main.Order;
 import com.jfoenix.controls.*;
@@ -9,10 +9,10 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -98,20 +98,22 @@ public class OrdersController implements Initializable {
 
     public void refreshTable() {
         if (validateInputs()) {
-            new Thread(new Task<Object>() {
+
+            new FetchOrdersRequest(statusCombo.getValue(), startDatePicker.getValue().toString(), endDatePicker.getValue().toString()) {
                 @Override
-                protected Object call() {
-                    if (API.fetchOrdersRequest(statusCombo.getValue(), startDatePicker.getValue().toString(), endDatePicker.getValue().toString())) {
-                        ObservableList<Order> orders = API.getOrdersPayload();
-                        TreeItem<Order> treeRoot = new RecursiveTreeItem<>(orders, RecursiveTreeObject::getChildren);
-                        Platform.runLater(() -> {
-                            tableView.setRoot(treeRoot);
-                        });
-                    } else
-                        System.out.println(API.getError());
-                    return null;
+                protected void success(JSONObject response) {
+                    ObservableList<Order> orders = this.getOrdersPayload(response);
+                    TreeItem<Order> treeRoot = new RecursiveTreeItem<>(orders, RecursiveTreeObject::getChildren);
+                    Platform.runLater(() -> tableView.setRoot(treeRoot));
                 }
-            }).start();
+
+                @Override
+                protected void fail(String error) {
+                    //TODO: show message?
+                    System.out.println("FetchOrdersRequest : " + error);
+                }
+            };
+
         }
     }
 

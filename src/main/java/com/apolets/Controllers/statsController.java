@@ -1,6 +1,6 @@
 package com.apolets.Controllers;
 
-import com.apolets.main.API;
+import com.apolets.API.StatsRequest;
 import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -8,6 +8,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.VBox;
+import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -23,12 +24,12 @@ public class statsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         pieChart.setLabelsVisible(false);
 
-
-        new Thread(() -> {
-            if (API.getStatsRequest()) {
+        new StatsRequest() {
+            @Override
+            protected void success(JSONObject response) {
                 //Animation for setting fulfillment indicator value
                 new Thread(() -> {
-                    double fulfillmentRate = API.getFulfillmentRate();
+                    double fulfillmentRate = this.getFulfillmentRate(response);
                     double currentRate = 0.0;
 
                     while (currentRate < fulfillmentRate) {
@@ -44,7 +45,7 @@ public class statsController implements Initializable {
 
                 }).start();
 
-                LinkedHashMap<String, Integer> categoriesMap = API.getTopCategories();
+                LinkedHashMap<String, Integer> categoriesMap = this.getTopCategories(response);
                 for (Map.Entry<String, Integer> singleCat : categoriesMap.entrySet()) {
                     Platform.runLater(() -> {
                         pieChart.getData().add(new PieChart.Data(singleCat.getKey(), singleCat.getValue()));
@@ -53,7 +54,7 @@ public class statsController implements Initializable {
 
                 }
 
-                String[] topListings = API.getTop5Listings();
+                String[] topListings = this.getTop5Listings(response);
 
                 int i = 0;
                 for (String topListing : topListings) {
@@ -64,9 +65,15 @@ public class statsController implements Initializable {
                     Platform.runLater(() -> topContainer.getChildren().add(listingLabel));
 
                 }
-
             }
-        }).start();
+
+            @Override
+            protected void fail(String error) {
+                //TODO: display error?
+                System.out.println("StatsRequest : " + error);
+            }
+        };
+
 
 
     }
