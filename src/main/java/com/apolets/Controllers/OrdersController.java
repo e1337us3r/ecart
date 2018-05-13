@@ -1,9 +1,12 @@
 package com.apolets.Controllers;
 
 import com.apolets.API.FetchOrdersRequest;
+import com.apolets.API.UpdateOrderStatus;
+import com.apolets.API.UpdateTrackingCode;
 import com.apolets.main.ComboBoxEditorBuilder;
 import com.apolets.main.Order;
 import com.jfoenix.controls.*;
+import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
 import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.application.Platform;
@@ -52,9 +55,10 @@ public class OrdersController implements Initializable {
         JFXTreeTableColumn<Order, Double> priceCol = new JFXTreeTableColumn<>("Price");
         JFXTreeTableColumn<Order, Double> costCol = new JFXTreeTableColumn<>("Cost");
         JFXTreeTableColumn<Order, String> statusCol = new JFXTreeTableColumn<>("Status");
+        JFXTreeTableColumn<Order, String> trackingCol = new JFXTreeTableColumn<>("Tracking Code");
         statusCol.setMinWidth(200);
         //ADD COLUMNS TO TABLE
-        tableView.getColumns().addAll(nameCol, dateCol, priceCol, costCol, quantityCol, statusCol);
+        tableView.getColumns().addAll(nameCol, dateCol, priceCol, costCol, quantityCol, statusCol, trackingCol);
 
         //SET VALUES TO VIEW IN COLUMNS
         nameCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("listing_name"));
@@ -63,6 +67,8 @@ public class OrdersController implements Initializable {
         dateCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("date"));
         quantityCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("quantity"));
         statusCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("status"));
+        trackingCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("trackingCode"));
+
 
         ObservableList<String> comboList = FXCollections.observableArrayList();
 
@@ -76,17 +82,76 @@ public class OrdersController implements Initializable {
 
         statusCol.setCellFactory(param -> new GenericEditableTreeTableCell<Order, String>(comboEditor));
 
+        TextFieldEditorBuilder trackingEditor = new TextFieldEditorBuilder();
+        trackingCol.setCellFactory(param -> new GenericEditableTreeTableCell<Order, String>(trackingEditor));
+
+
+        trackingCol.setOnEditCommit(event -> {
+            TreeItem<Order> editedOrder = tableView.getTreeItem(event.getTreeTablePosition().getRow());
+            trackingEditor.setValue("");
+            tableView.refresh();
+            new UpdateTrackingCode(editedOrder.getValue().getId(), event.getNewValue()) {
+                @Override
+                protected void success(JSONObject response) {
+                    editedOrder.getValue().setTrackingCode(event.getNewValue());
+                    trackingEditor.setValue(event.getNewValue());
+                    tableView.refresh();
+
+                }
+
+                @Override
+                protected void fail(String error) {
+
+                }
+            };
+
+
+        });
 
         statusCol.setOnEditCommit(event -> {
             TreeItem<Order> editedOrder = tableView.getTreeItem(event.getTreeTablePosition().getRow());
 
             if (event.getNewValue().equalsIgnoreCase("Preparing") && event.getOldValue().equalsIgnoreCase("Waiting For Approval")) {
-                editedOrder.getValue().setStatus(event.getNewValue());
+                new UpdateOrderStatus(editedOrder.getValue().getId(), "Preparing") {
+                    @Override
+                    protected void success(JSONObject response) {
+                        editedOrder.getValue().setStatus("Preparing");
+                        tableView.refresh();
+                    }
+
+                    @Override
+                    protected void fail(String error) {
+                        System.out.println("fail");
+                    }
+                };
             } else if (event.getNewValue().equalsIgnoreCase("Shipped") && event.getOldValue().equalsIgnoreCase("Preparing") && !editedOrder.getValue().getTrackingCode().isEmpty()) {
-                editedOrder.getValue().setStatus(event.getNewValue());
+                new UpdateOrderStatus(editedOrder.getValue().getId(), "Shipped") {
+                    @Override
+                    protected void success(JSONObject response) {
+                        editedOrder.getValue().setStatus("Shipped");
+                        tableView.refresh();
+                    }
+
+                    @Override
+                    protected void fail(String error) {
+                        System.out.println("fail");
+                    }
+                };
+
 
             } else if (event.getNewValue().equalsIgnoreCase("Refund") && comboList.contains(event.getOldValue())) {
-                editedOrder.getValue().setStatus(event.getNewValue());
+                new UpdateOrderStatus(editedOrder.getValue().getId(), "Refund") {
+                    @Override
+                    protected void success(JSONObject response) {
+                        editedOrder.getValue().setStatus("Refund");
+                        tableView.refresh();
+                    }
+
+                    @Override
+                    protected void fail(String error) {
+                        System.out.println("fail");
+                    }
+                };
             } else comboEditor.setValue(event.getOldValue());
 
             tableView.refresh();
