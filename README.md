@@ -1,7 +1,9 @@
 # ecart
 E-commerce system with LAMP stack backend and 2 end-points: Java application(for merchants) and Website (for shoppers).
 
-You can view the Website at http://shop.apolets.com/
+Screenshots off the app is available at the bottom of this readme.
+You can view the Website at http://shop.apolets.com/ (Hosting has expired :/)
+
 
 ## Java Client Features [For Merchants]
 - View daily/weekly/mothly and yearly profit,pending and refunded payment report in detail.
